@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# until-count: display a series of numbers
+
+count = 1
+
+until [ $count -gt 5 ]; do
+	clear
+	echo $count
+	count=$((count + 1))
+	sleep 1
+done
+echo "Filished."

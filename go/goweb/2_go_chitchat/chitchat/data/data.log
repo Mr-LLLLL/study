@@ -1,0 +1,146 @@
+DATA2020/07/17 22:14:29 data.go:42: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:14:29 data.go:42: ERR unknown command 'ppush'
+DATA2020/07/17 22:14:29 data.go:42: ERR syntax error
+DATA2020/07/17 22:14:29 data.go:42: ERR unknown command 'smember'
+DATA2020/07/17 22:14:29 data.go:42: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:17:47 data.go:42: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:17:47 data.go:42: ERR unknown command 'ppush'
+DATA2020/07/17 22:17:47 data.go:42: ERR syntax error
+DATA2020/07/17 22:17:47 data.go:42: ERR unknown command 'smember'
+DATA2020/07/17 22:17:47 data.go:42: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:26:00 data.go:43: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:26:00 data.go:43: ERR unknown command 'ppush'
+DATA2020/07/17 22:26:00 data.go:43: ERR syntax error
+DATA2020/07/17 22:26:00 data.go:43: ERR unknown command 'smember'
+DATA2020/07/17 22:26:00 data.go:43: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:29:55 data.go:43: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:29:55 data.go:43: ERR unknown command 'ppush'
+DATA2020/07/17 22:29:55 data.go:43: ERR syntax error
+DATA2020/07/17 22:29:55 data.go:43: ERR unknown command 'smember'
+DATA2020/07/17 22:29:55 data.go:43: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:33:48 data.go:42: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:33:48 data.go:42: ERR unknown command 'ppush'
+DATA2020/07/17 22:33:48 data.go:42: ERR syntax error
+DATA2020/07/17 22:33:48 data.go:42: ERR unknown command 'smember'
+DATA2020/07/17 22:33:48 data.go:42: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:33:53 data.go:42: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:33:53 data.go:42: ERR unknown command 'ppush'
+DATA2020/07/17 22:33:53 data.go:42: ERR syntax error
+DATA2020/07/17 22:33:53 data.go:42: ERR unknown command 'smember'
+DATA2020/07/17 22:33:53 data.go:42: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:34:10 data.go:42: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:34:10 data.go:42: ERR unknown command 'ppush'
+DATA2020/07/17 22:34:10 data.go:42: ERR syntax error
+DATA2020/07/17 22:34:10 data.go:42: ERR unknown command 'smember'
+DATA2020/07/17 22:34:10 data.go:42: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:34:39 data.go:42: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:34:39 data.go:42: ERR unknown command 'ppush'
+DATA2020/07/17 22:34:39 data.go:42: ERR syntax error
+DATA2020/07/17 22:34:39 data.go:42: ERR unknown command 'smember'
+DATA2020/07/17 22:34:39 data.go:42: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:34:45 data.go:42: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:34:45 data.go:42: ERR unknown command 'ppush'
+DATA2020/07/17 22:34:45 data.go:42: ERR syntax error
+DATA2020/07/17 22:34:45 data.go:42: ERR unknown command 'smember'
+DATA2020/07/17 22:34:45 data.go:42: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:35:34 data.go:42: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:35:34 data.go:42: ERR unknown command 'ppush'
+DATA2020/07/17 22:35:34 data.go:42: ERR syntax error
+DATA2020/07/17 22:35:34 data.go:42: ERR unknown command 'smember'
+DATA2020/07/17 22:35:34 data.go:42: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:36:09 data.go:42: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:36:09 data.go:42: ERR unknown command 'ppush'
+DATA2020/07/17 22:36:09 data.go:42: ERR syntax error
+DATA2020/07/17 22:36:09 data.go:42: ERR unknown command 'smember'
+DATA2020/07/17 22:36:09 data.go:42: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:36:35 data.go:42: dial tcp :1111: connect: connection refused
+DATA2020/07/17 22:36:35 data.go:42: dial tcp :1111: connect: connection refused
+DATA2020/07/17 22:36:35 data.go:42: dial tcp :1111: connect: connection refused
+DATA2020/07/17 22:36:35 data.go:42: dial tcp :1111: connect: connection refused
+DATA2020/07/17 22:36:35 data.go:42: dial tcp :1111: connect: connection refused
+DATA2020/07/17 22:36:35 data.go:42: dial tcp :1111: connect: connection refused
+DATA2020/07/17 22:36:35 data.go:42: dial tcp :1111: connect: connection refused
+DATA2020/07/17 22:36:35 data.go:42: dial tcp :1111: connect: connection refused
+DATA2020/07/17 22:36:35 data.go:42: dial tcp :1111: connect: connection refused
+DATA2020/07/17 22:36:35 data.go:42: dial tcp :1111: connect: connection refused
+DATA2020/07/17 22:36:35 data.go:42: dial tcp :1111: connect: connection refused
+DATA2020/07/17 22:36:35 data.go:42: dial tcp :1111: connect: connection refused
+DATA2020/07/17 22:36:35 data.go:42: dial tcp :1111: connect: connection refused
+DATA2020/07/17 22:36:35 data.go:42: dial tcp :1111: connect: connection refused
+DATA2020/07/17 22:36:35 data.go:42: dial tcp :1111: connect: connection refused
+DATA2020/07/17 22:38:28 data.go:42: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:38:28 data.go:42: ERR unknown command 'ppush'
+DATA2020/07/17 22:38:28 data.go:42: ERR syntax error
+DATA2020/07/17 22:38:28 data.go:42: ERR unknown command 'smember'
+DATA2020/07/17 22:38:28 data.go:42: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:43:54 data.go:42: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:43:54 data.go:42: ERR unknown command 'ppush'
+DATA2020/07/17 22:43:54 data.go:42: ERR syntax error
+DATA2020/07/17 22:43:54 data.go:42: ERR unknown command 'smember'
+DATA2020/07/17 22:43:54 data.go:42: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:44:08 data.go:42: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:44:08 data.go:42: ERR unknown command 'ppush'
+DATA2020/07/17 22:44:08 data.go:42: ERR syntax error
+DATA2020/07/17 22:44:08 data.go:42: ERR unknown command 'smember'
+DATA2020/07/17 22:44:08 data.go:42: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:48:04 data.go:42: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:48:04 data.go:42: ERR unknown command 'ppush'
+DATA2020/07/17 22:48:04 data.go:42: ERR syntax error
+DATA2020/07/17 22:48:04 data.go:42: ERR unknown command 'smember'
+DATA2020/07/17 22:48:04 data.go:42: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:48:34 data.go:42: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:48:34 data.go:42: ERR unknown command 'ppush'
+DATA2020/07/17 22:48:34 data.go:42: ERR syntax error
+DATA2020/07/17 22:48:34 data.go:42: ERR unknown command 'smember'
+DATA2020/07/17 22:48:34 data.go:42: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:48:46 data.go:42: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:48:46 data.go:42: ERR unknown command 'ppush'
+DATA2020/07/17 22:48:46 data.go:42: ERR syntax error
+DATA2020/07/17 22:48:46 data.go:42: ERR unknown command 'smember'
+DATA2020/07/17 22:48:46 data.go:42: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:48:57 data.go:42: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:48:57 data.go:42: ERR unknown command 'ppush'
+DATA2020/07/17 22:48:57 data.go:42: ERR syntax error
+DATA2020/07/17 22:48:57 data.go:42: ERR unknown command 'smember'
+DATA2020/07/17 22:48:57 data.go:42: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:49:11 data.go:42: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:49:11 data.go:42: ERR unknown command 'ppush'
+DATA2020/07/17 22:49:11 data.go:42: ERR syntax error
+DATA2020/07/17 22:49:11 data.go:42: ERR unknown command 'smember'
+DATA2020/07/17 22:49:11 data.go:42: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:56:14 data.go:43: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:56:14 data.go:43: ERR unknown command 'ppush'
+DATA2020/07/17 22:56:14 data.go:43: ERR syntax error
+DATA2020/07/17 22:56:14 data.go:43: ERR unknown command 'smember'
+DATA2020/07/17 22:56:14 data.go:43: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:56:39 data.go:43: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:56:39 data.go:43: ERR unknown command 'ppush'
+DATA2020/07/17 22:56:39 data.go:43: ERR syntax error
+DATA2020/07/17 22:56:39 data.go:43: ERR unknown command 'smember'
+DATA2020/07/17 22:56:39 data.go:43: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:57:56 data.go:43: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:57:56 data.go:43: ERR unknown command 'ppush'
+DATA2020/07/17 22:57:56 data.go:43: ERR syntax error
+DATA2020/07/17 22:57:56 data.go:43: ERR unknown command 'smember'
+DATA2020/07/17 22:57:56 data.go:43: redigo: StringMap expects even number of values result
+DATA2020/07/17 22:59:58 data.go:43: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 22:59:58 data.go:43: ERR unknown command 'ppush'
+DATA2020/07/17 22:59:58 data.go:43: ERR syntax error
+DATA2020/07/17 22:59:58 data.go:43: ERR unknown command 'smember'
+DATA2020/07/17 22:59:58 data.go:43: redigo: StringMap expects even number of values result
+DATA2020/07/17 23:01:44 data.go:43: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 23:01:44 data.go:43: ERR syntax error
+DATA2020/07/17 23:02:36 data.go:43: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 23:02:36 data.go:43: ERR syntax error
+DATA2020/07/17 23:15:18 data.go:43: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 23:15:18 data.go:43: ERR syntax error
+DATA2020/07/17 23:16:01 data.go:43: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 23:16:01 data.go:43: ERR syntax error
+DATA2020/07/17 23:16:18 data.go:43: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 23:16:18 data.go:43: ERR syntax error
+DATA2020/07/17 23:17:09 data.go:43: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 23:17:09 data.go:43: ERR syntax error
+DATA2020/07/17 23:17:39 data.go:43: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 23:17:39 data.go:43: ERR syntax error
+DATA2020/07/17 23:19:14 data.go:43: ERR wrong number of arguments for 'hset' command
+DATA2020/07/17 23:19:14 data.go:43: ERR syntax error

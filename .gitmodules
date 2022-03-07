@@ -1,0 +1,6 @@
+[submodule "lua/nvim"]
+	path = lua/nvim
+	url = https://github.com/glepnir/nvim.git
+[submodule "go/etcd"]
+	path = go/etcd
+	url = https://github.com/etcd-io/etcd.git

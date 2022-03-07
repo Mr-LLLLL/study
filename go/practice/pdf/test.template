@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: 0 auto;
+            font-size: 12px;
+        }
+
+        .template-page {
+            color: #262626;
+            padding: 24px;
+        }
+
+        .time {
+            margin-bottom: 10px;
+        }
+
+        .title {
+            font-size: 24px;
+            line-height: 33px;
+            font-weight: bolder;
+            text-align: center;
+        }
+
+        .info-title {
+            font-size: 17px;
+            line-height: 24px;
+            margin-bottom: 10px;
+            font-weight: bolder;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .info-box {
+            margin-bottom: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            border: 1px solid #e5e5e5;
+            width: 100%;
+        }
+
+        table tr {
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        table tr th,
+        table tr td {
+            text-align: left;
+            padding: 12px;
+        }
+
+        table tr th {
+            background-color: #fafafa;
+        }
+
+        table tr td span {
+            display: inline-block;
+            line-height: 17px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            vertical-align: bottom;
+        }
+
+        /* 二等分表格 */
+        .halve {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: center;
+            border: 1px solid #e5e5e5;
+            box-sizing: border-box;
+            border-bottom: none;
+        }
+
+        .header {
+            width: 100%;
+            background-color: #f0f0f0;
+            box-sizing: border-box;
+            padding: 12px;
+            font-weight: bold;
+            border: 1px solid #e5e5e5;
+            border-bottom: none;
+            position: relative;
+        }
+
+        .list-box {
+            width: 50%;
+            box-sizing: border-box;
+            padding: 12px;
+            border-bottom: 1px solid #e5e5e5;
+            position: relative;
+        }
+
+        .list-box:nth-child(odd) {
+            border-right: 1px solid #e5e5e5;
+        }
+
+        .entireLine {
+            width: 100%;
+            border-right: none !important;
+            position: relative;
+        }
+
+        .entireLine:before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: #e5e5e5;
+        }
+
+        .list-box img {
+            display: block;
+            max-width: 100%;
+            max-height: 453px;
+            overflow: hidden;
+            background-color: #f2f2f2;
+            margin: 10px auto 0;
+        }
+
+        .halve-table tr td span {
+            width: 350px;
+        }
+
+        .halve-table img {
+            display: block;
+            max-width: 100%;
+            max-height: 453px;
+            overflow: hidden;
+            background-color: #f2f2f2;
+            margin: 10px auto 0;
+        }
+
+        .halve-table tr td:nth-child(2n - 1) {
+            border-right: 1px solid #e5e5e5;
+        }
+
+        .halve-table:last-child {
+            margin-top: 10px;
+        }
+
+        /* 商品基础信息表格 */
+        .basic tr td span {
+            width: 96px;
+        }
+
+        .basic tr td:first-child div {
+            width: 246px;
+            max-height: 34px;
+            overflow: hidden;
+            word-break: break-all;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+
+        /* 四等分表格 */
+        .quartering-table tr td span {
+            width: 164px;
+        }
+
+        /* 五等分表格 */
+        .quintile-table tr td span {
+            width: 126px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="template-page">
+        <div class="time">打印时间：{{ .PrintDate }}</div>
+        <div class="title">【{{ .OrderTitle }}】</div>
+        {{if not .OrderInfo.HideOrderInfo}}
+        <div class="info-box">
+            <div class="info-title">订单信息</div>
+            <div class="halve">
+                {{if .OrderInfo.OrderNumber}}
+                <div class="list-box">订单编号：{{.OrderInfo.OrderNumber}}</div>
+                {{end}}
+                {{if .OrderInfo.OrderStatus}}
+                <div class="list-box">订单状态：{{.OrderInfo.OrderStatus}}</div>
+                {{end}}
+                {{if .OrderInfo.OrderId}}
+                <div class="list-box">订单ID：{{.OrderInfo.OrderId}}</div>
+                {{end}}
+                {{if .OrderInfo.CreateTime}}
+                <div class="list-box">下单时间：{{.OrderInfo.CreateTime}}</div>
+                {{end}}
+                {{if .OrderInfo.Buyer}}
+                <div class="list-box">购买人：{{.OrderInfo.Buyer}}</div>
+                {{end}}
+                {{if .OrderInfo.Consignee}}
+                <div class="list-box">收货人：{{.OrderInfo.Consignee}}</div>
+                {{end}}
+                {{if .OrderInfo.Mobile}}
+                <div class="list-box">收货电话：{{.OrderInfo.Mobile}}</div>
+                {{end}}
+                {{if .OrderInfo.Address}}
+                <div class="list-box">收货地址：{{.OrderInfo.Address}}</div>
+                {{end}}
+                {{if .OrderInfo.OrderType}}
+                <div class="list-box">订单类型：{{.OrderInfo.OrderType}}</div>
+                {{end}}
+                {{if .OrderInfo.OrderResource}}
+                <div class="list-box">订单来源：{{.OrderInfo.OrderResource}}</div>
+                {{end}}
+                {{if .OrderInfo.CustomerFollowerInfo}}
+                <div class="list-box">跟进人姓名/手机：{{.OrderInfo.CustomerFollowerInfo}}</div>
+                {{end}}
+                {{if .OrderInfo.FollowerUserInfo}}
+                <div class="list-box">归属员工姓名/手机：{{.OrderInfo.FollowerUserInfo}}</div>
+                {{end}}
+                {{if .OrderInfo.OrderCreatorInfo}}
+                <div class="list-box">订单创建人/手机：{{.OrderInfo.OrderCreatorInfo}}</div>
+                {{end}}
+                {{if .OrderInfo.Remark}}
+                <div class="list-box">备注：{{.OrderInfo.Remark}}</div>
+                {{end}}
+                {{if .OrderInfo.PayType}}
+                <div class="list-box">支付方式：{{.OrderInfo.PayType}}</div>
+                {{end}}
+                {{if .OrderInfo.ShowBlankGrid}}
+                <div class="list-box"> </div>
+                {{end}}
+                {{if not .OrderInfo.HideVouchResource}}
+                <div class="list-box entireLine">
+                    <span>凭证：</span>
+                    <!-- 无凭证图片则不显示img标签 -->
+                    {{range .OrderInfo.VouchResource}}
+                    <img src={{.URL}} alt={{.Name}}>
+                    {{end}}
+                </div>
+                {{end}}
+            </div>
+        </div>
+        {{end}}
+        {{if not .Custom.HideCustom}}
+        <div class="info-box">
+            <div class="info-title">订单自定义信息</div>
+            <div class="halve">
+                {{range .Custom.Pairs}}
+                <div class="list-box">{{.Key}}：{{.Value}}</div>
+                {{end}}
+                {{if .Custom.ShowBlankGrid}}
+                <div class="list-box"> </div>
+                {{end}}
+            </div>
+        </div>
+        {{end}}
+        {{if not .GoodsInfo.HideGoodsInfo}}
+        <div class="info-box">
+            <div class="info-title">商品基础信息</div>
+            <table class="basic">
+                <tr>
+                    {{if not .GoodsInfo.HideName}}
+                    <th><span>商品</span></th>
+                    {{end}}
+                    {{if not .GoodsInfo.HidePrice}}
+                    <th><span>单价（元）</span></th>
+                    {{end}}
+                    {{if not .GoodsInfo.HideNum}}
+                    <th><span>数量</span></th>
+                    {{end}}
+                    {{if not .GoodsInfo.HideDiscount}}
+                    <th><span>折扣</span></th>
+                    {{end}}
+                    {{if not .GoodsInfo.HidePaymentPrice}}
+                    <th><span>折后总价（元）</span></th>
+                    {{end}}
+                </tr>
+                {{range .GoodsInfo.Goods}}
+                <tr>
+                    {{if not $.GoodsInfo.HideName}}
+                    <td>
+                        <div>{{.Name}}</div>
+                    </td>
+                    {{end}}
+                    {{if not $.GoodsInfo.HidePrice}}
+                    <td><span>{{.Price}}</span></td>
+                    {{end}}
+                    {{if not $.GoodsInfo.HideNum}}
+                    <td><span>{{.Num}}</span></td>
+                    {{end}}
+                    {{if not $.GoodsInfo.HideDiscount}}
+                    <td><span>{{.Discount}}</span></td>
+                    {{end}}
+                    {{if not $.GoodsInfo.HidePaymentPrice}}
+                    <td><span>{{.PaymentPrice}}</span></td>
+                    {{end}}
+                </tr>
+                {{end}}
+            </table>
+        </div>
+        {{end}}
+        {{if not .AccountInfo.HideAccountInfo}}
+        <div class="info-box">
+            <div class="info-title">结算信息</div>
+            <div class="halve">
+                {{if .AccountInfo.GoodsTotalPrice}}
+                <div class="list-box">商品总价（元）：{{.AccountInfo.GoodsTotalPrice}}</div>
+                {{end}}
+                {{if .AccountInfo.DiscountTotalPrice}}
+                <div class="list-box">优惠总价（元）：{{.AccountInfo.DiscountTotalPrice}}</div>
+                {{end}}
+                {{if .AccountInfo.MemberLevelDiscountAmount}}
+                <div class="list-box">会员折扣（元）：{{.AccountInfo.MemberLevelDiscountAmount}}</div>
+                {{end}}
+                {{if .AccountInfo.CouponTotalPrice}}
+                <div class="list-box">优惠卷总价（元）：{{.AccountInfo.CouponTotalPrice}}</div>
+                {{end}}
+                {{if .AccountInfo.PaymentTotalPrice}}
+                <div class="list-box">实际付款（元）：{{.AccountInfo.PaymentTotalPrice}}</div>
+                {{end}}
+                {{if .AccountInfo.ShowBlankGrid}}
+                <div class="list-box"> </div>
+                {{end}}
+            </div>
+        </div>
+        {{end}}
+        {{if not .DeliveryInfo.HideDeliveryInfo}}
+        <div class="info-box">
+            <div class="info-title">发货信息</div>
+            <div class="halve">
+                {{if .DeliveryInfo.Sender}}
+                <div class="list-box">发货人：{{.DeliveryInfo.Sender}}</div>
+                {{end}}
+                {{if .DeliveryInfo.DeliveryTime}}
+                <div class="list-box">发货时间：{{.DeliveryInfo.DeliveryTime}}</div>
+                {{end}}
+                {{if .DeliveryInfo.ExpressCompany}}
+                <div class="list-box">快递公司：{{.DeliveryInfo.ExpressCompany}}</div>
+                {{end}}
+                {{if .DeliveryInfo.LogisticCode}}
+                <div class="list-box">快递单号：{{.DeliveryInfo.LogisticCode}}</div>
+                {{end}}
+                {{if .DeliveryInfo.ShowBlankGrid}}
+                <div class="list-box"> </div>
+                {{end}}
+            </div>
+        </div>
+        {{end}}
+        {{if not .PaybackPlan.HidePaybackPlan}}
+        <div class="info-box">
+            <div class="info-title">回款计划</div>
+            <table class="quintile-table">
+                <tr>
+                    {{if not $.PaybackPlan.HidePhase}}
+                    <th><span>期次</span></th>
+                    {{end}}
+                    {{if not $.PaybackPlan.HideAmount}}
+                    <th><span>计划回款金额（元）</span></th>
+                    {{end}}
+                    {{if not $.PaybackPlan.HideRate}}
+                    <th><span>占比</span></th>
+                    {{end}}
+                    {{if not $.PaybackPlan.HideRemindDate}}
+                    <th><span>提醒日期</span></th>
+                    {{end}}
+                    {{if not $.PaybackPlan.HideStatus}}
+                    <th><span>回款状态</span></th>
+                    {{end}}
+                </tr>
+                {{range .PaybackPlan.PaybackPlanList}}
+                <tr>
+                    {{if not $.PaybackPlan.HidePhase}}
+                    <td><span>{{.Phase}}</span></td>
+                    {{end}}
+                    {{if not $.PaybackPlan.HideAmount}}
+                    <td><span>{{.Amount}}</span></td>
+                    {{end}}
+                    {{if not $.PaybackPlan.HideRate}}
+                    <td><span>{{.Rate}}</span></td>
+                    {{end}}
+                    {{if not $.PaybackPlan.HideRemindDate}}
+                    <td><span>{{.RemindDate}}</span></td>
+                    {{end}}
+                    {{if not $.PaybackPlan.HideStatus}}
+                    <td><span>{{.Status}}</span></td>
+                    {{end}}
+                </tr>
+                {{end}}
+            </table>
+        </div>
+        {{end}}
+        {{if .PaybackReceipt.HidePaybackReceipt}}
+        <div class="info-box">
+            <div class="info-title">回款单</div>
+            <table class="quintile-table">
+                <tr>
+                    {{if not $.PaybackReceipt.HideDate}}
+                    <th><span>回款时间</span></th>
+                    {{end}}
+                    {{if not $.PaybackReceipt.HideAmount}}
+                    <th><span>回款金额（元）</span></th>
+                    {{end}}
+                    {{if not $.PaybackReceipt.HideRemitter}}
+                    <th><span>打款人</span></th>
+                    {{end}}
+                    {{if not $.PaybackReceipt.HideMethod}}
+                    <th><span>回款方式</span></th>
+                    {{end}}
+                </tr>
+                {{range .PaybackReceipt.PaybackReceiptList}}
+                <tr>
+                    {{if not $.PaybackReceipt.HideDate}}
+                    <td><span>{{.Date}}</span></td>
+                    {{end}}
+                    {{if not $.PaybackReceipt.HideAmount}}
+                    <td><span>{{.Amount}}</span></td>
+                    {{end}}
+                    {{if $.PaybackReceipt.Remitter}}
+                    <td><span>{{.Remitter}}</span></td>
+                    {{end}}
+                    {{if not $.PaybackReceipt.HideMethod}}
+                    <td><span>{{.Method}}</span></td>
+                    {{end}}
+                </tr>
+                {{end}}
+            </table>
+        </div>
+        {{end}}
+        {{if not .InvoiceInfo.HideInvoiceInfo}}
+        <div class="info-box">
+            <div class="info-title">发票信息</div>
+            {{range .InvoiceInfo.InvoiceList}}
+            <div class="header">发票.{{.Index}}</div>
+            <div class="halve">
+                {{if not $.InvoiceInfo.HideMethod}}
+                <div class="list-box">开票方式：{{.Method}}</div>
+                {{end}}
+                {{if $.InvoiceInfo.CusName}}
+                <div class="list-box">关联联系人：{{.CusName}}</div>
+                {{end}}
+                {{if $.InvoiceInfo.CorpName}}
+                <div class="list-box">联系人企业：{{.CorpName}}</div>
+                {{end}}
+                {{if $.InvoiceInfo.Amount}}
+                <div class="list-box">开票金额：{{.Amount}}</div>
+                {{end}}
+                {{if $.InvoiceInfo.Detail}}
+                <div class="list-box">开票明细：{{.Detail}}</div>
+                {{end}}
+                {{if $.InvoiceInfo.Type}}
+                <div class="list-box">开票类型：{{.Type}}</div>
+                {{end}}
+                {{if $.InvoiceInfo.Status}}
+                <div class="list-box">审核状态：{{.Status}}</div>
+                {{end}}
+                {{if $.InvoiceInfo.Date}}
+                <div class="list-box">审核时间：{{.Date}}</div>
+                {{end}}
+                {{if $.InvoiceInfo.SN}}
+                <td colspan="2"><span>发票申请号：{{.SN}}</span></td>
+                {{end}}
+            </div>
+            {{end}}
+        </div>
+        {{end}}
+        {{if not .OrderAudit.HideOrderAudit}}
+        <div class="info-box">
+            <div class="info-title">订单审核</div>
+            <table class="quintile-table">
+                <tr>
+                    {{if not $.OrderAudit.HideName}}
+                    <th><span>审核人姓名</span></th>
+                    {{end}}
+                    {{if not $.OrderAudit.HideRole}}
+                    <th><span>审核人角色</span></th>
+                    {{end}}
+                    {{if not $.OrderAudit.HideDept}}
+                    <th><span>审核人部门</span></th>
+                    {{end}}
+                    {{if not $.OrderAudit.HideDate}}
+                    <th><span>审核时间</span></th>
+                    {{end}}
+                    {{if not $.OrderAudit.HideReason}}
+                    <th><span>审核原因</span></th>
+                    {{end}}
+                    {{if not $.OrderAudit.HideStatus}}
+                    <th><span>审核状态</span></th>
+                    {{end}}
+                </tr>
+                {{range .OrderAudit.OrderAudits}}
+                <tr>
+                    {{if not $.OrderAudit.HideName}}
+                    <td><span>{{.Name}}</span></td>
+                    {{end}}
+                    {{if not $.OrderAudit.HideRole}}
+                    <td><span>{{.Role}}</span></td>
+                    {{end}}
+                    {{if not $.OrderAudit.HideDept}}
+                    <td><span>{{.Dept}}</span></td>
+                    {{end}}
+                    {{if not $.OrderAudit.HideDate}}
+                    <td><span>{{.Date}}</span></td>
+                    {{end}}
+                    {{if not $.OrderAudit.HideReason}}
+                    <td><span>{{.Reason}}</span></td>
+                    {{end}}
+                    {{if not $.OrderAudit.HideStatus}}
+                    <td><span>{{.Status}}</span></td>
+                    {{end}}
+                </tr>
+                {{end}}
+            </table>
+        </div>
+        {{end}}
+        {{if not .AftersaleInfo.HideAftersaleInfo}}
+        <div class="info-box">
+            <div class="info-title">售后信息</div>
+            <div class="halve">
+                {{if .AftersaleInfo.Id}}
+                <div class="list-box">售后单号：{{.AftersaleInfo.Id}}</div>
+                {{end}}
+                {{if .AftersaleInfo.CreateTime}}
+                <div class="list-box">申请售后时间：{{.AftersaleInfo.CreateTime}}</div>
+                {{end}}
+                {{if $.AftersaleInfo.Creator}}
+                <div class="list-box">申请人：{{.AftersaleInfo.Creator}}</div>
+                {{end}}
+                {{if $.AftersaleInfo.Type}}
+                <div class="list-box">退款类型：{{.AftersaleInfo.Type}}</div>
+                {{end}}
+                {{if $.AftersaleInfo.Price}}
+                <div class="list-box">退款金额（元）：{{.AftersaleInfo.Price}}</div>
+                {{end}}
+                {{if $.AftersaleInfo.Status}}
+                <div class="list-box">售后状态：{{.AftersaleInfo.Status}}</div>
+                {{end}}
+                {{if $.AftersaleInfo.SendStatus}}
+                <div class="list-box">发货状态：{{.AftersaleInfo.SendStatus}}</div>
+                {{end}}
+                {{if $.AftersaleInfo.ShowBlankGrid}}
+                <div class="list-box"> </div>
+                {{end}}
+                {{if not .AftersaleInfo.HideVouchers}}
+                <div class="list-box entireLine">
+                    <span>凭证：</span>
+                    {{range .AftersaleInfo.Vouchers}}
+                    <!-- 无凭证图片则不显示img标签 -->
+                    <img src={{.Url}} alt={{.Name}}>
+                    {{end}}
+                </div>
+                {{end}}
+            </div>
+        </div>
+        {{end}}
+    </div>
+    <div style="page-break-after:always; "></div>
+</body>
+
+</html>

@@ -1,0 +1,7 @@
+<h1>New Blog Post</h1>
+<form action="" method="post">
+    TITLE:<input type="text" name="title" value="{{ .Post.Title }}"><br>
+    CONTENT:<textarea name="content" colspan="3" rowspan="10">{{ .Post.Content }}</textarea>
+    <input type="hidden" name="id" value="{{ .Post.Id }}">
+    <input type="submig">
+</form>

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prod
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: kubia-toleration
+  template:
+    metadata:
+      name: kubia-toleration
+      labels:
+        app: kubia-toleration
+    spec:
+      containers:
+      - image: luksa/kubia:v1
+        name: nodejs
+      tolerations:
+      - key: node-type
+        operator: Equal
+        value: production
+        effect: NoSchedule

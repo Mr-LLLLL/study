@@ -1,0 +1,3 @@
+#!/bin/bash
+foo=1;
+echo $foo

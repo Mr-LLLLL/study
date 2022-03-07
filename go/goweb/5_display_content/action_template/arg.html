@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+        <title>Go Web Programming</title>
+        
+    </head>
+    <body>
+        <div>The dot is {{ . }}</div>
+        <div>
+            {{ with "world" }}
+                Now the dot is set to {{ . }}
+            {{ else }}
+                The dot is still {{ . }}
+            {{ end }}
+        </div>
+        <div>the dot is {{ . }} again</div>
+    </body>
+</html>

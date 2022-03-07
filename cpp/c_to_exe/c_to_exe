@@ -1,0 +1,4 @@
+ g++ -E hello.c -o hello.i	//-E:pretreatment  -o make file to local but show in the screen
+ g++ -S hello.i -o hello.s	//-S:produce assembly file and check programma
+ g++ -c hello.s -o hello.o	//-c:produce machine language
+ g++ hello.o -o hello		//link

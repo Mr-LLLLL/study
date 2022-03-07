@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# while-read: read lines from a file
+
+#while read one two three; do
+#	printf "one: %s\ttwo: %s\tthree: %s\n" $one $two $three
+#done < test
+
+
+cat test | while read one two three; do
+	printf "one: %s\ttwo: %s\tthree: %s\n" $one $two $three
+done

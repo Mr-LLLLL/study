@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# test-integer: evaluate the value of an integer.
+
+echo -n "Please enter an integer -> "
+read int
+
+if [ -z "$int" ]; then
+	echo "int is empty." >&2
+	exit 1
+fi
+
+if [ $int -eq 0 ]; then
+	echo "int is zero."
+else
+	if [ $int -lt 0 ]; then
+		echo "int is negative."
+	else
+		echo "int is positive."
+	fi
+	if [ $((int % 2)) -eq 0 ]; then 
+		echo "int is even."
+	else
+		echo "int is odd."
+	fi
+fi
+
+# test_integer2: evaluate the value of an integer.
+
+if [[ "$int" =~ ^-?[0-9]+$ ]]; then
+	if ((int == 0 )); then
+		echo "int is zere."
+	else
+		if ((int < 0 )); then
+			echo "int is negative."
+		else
+			echo "int is positive."
+		fi
+		if (( ((int % 2)) )); then
+			echo "int is even."
+		else
+			echo "int is odd."
+		fi
+	fi
+else
+	echo "int is not an integer." >&2
+	exit 1
+fi
+
+# test_integer3: determine if an intefer is within a
+# specified range of values.
+
+MIN_VAL=1
+MAX_VAL=100
+
+if [[ "$int" =~ ^-?[0-9]+$ ]]; then
+	if [[ ! (int -ge MIN_VAL && int -le MAX_VAL) ]]; then
+		echo "$int is out of range."
+	else
+		echo "$int is within $MIN_VAL to $MAX_VAL."
+	fi
+else
+	echo "$int is not an integer." >&2
+	exit 1
+fi

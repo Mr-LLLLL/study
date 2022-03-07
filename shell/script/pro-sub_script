@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# pro-sub : demo or process substitution
+
+while read attr links owner group size month year time filename; do
+	cat <<- EOF
+		Filename:	$filename
+		Size:		$size
+		Owner:		$owner
+		Group:		$group
+		Modified:	$month $year $time
+		Links:		$links
+		Attributes:	$attr
+
+	EOF
+done < <(ls -l | tail -n +2)

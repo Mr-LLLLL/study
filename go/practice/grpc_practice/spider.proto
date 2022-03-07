@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package spider;
+
+option go_package = "spider";
+
+service GoSpider {
+    rpc GetMessage (MessageReq) returns (MessageRes);
+
+    rpc GetClientStream (stream MessageReq) returns (MessageRes);
+
+    rpc GetServerStream (MessageReq) returns (stream MessageRes);
+
+    rpc GetTwoStream (stream MessageReq) returns (stream MessageRes);
+}
+
+// TODO(guest): Describe this message.
+message MessageReq {
+    repeated string messages = 1;
+}
+
+message MessageRes {
+    repeated string messages = 1;
+}

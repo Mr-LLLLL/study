@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+        <title>Go Web Programming</title>
+        
+    </head>
+    <body>
+        <u1>
+        {{ range $key, $value := . }}
+            <li>the key is {{ $key }} and the value is {{ $value }}</li>
+        {{ else }}
+            <li> Nothing to show </li>
+        {{ end }}
+        </u1>
+    </body>
+</html>

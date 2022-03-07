@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# case-menu: a menu driven system information program
+
+while true; do
+	read -p "Enter selection A, B, C, or Q > "
+
+	case $REPLY in
+		[[:upper:]])	echo "upper"
+						;;&
+		[[:alpha:]])	echo "alpha"
+						;;&
+	esac
+done
+echo "Program terminated."

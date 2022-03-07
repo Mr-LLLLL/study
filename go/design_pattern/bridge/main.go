@@ -1,0 +1,3 @@
+pacakge main
+
+func main() {}

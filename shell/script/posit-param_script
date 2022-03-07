@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# posit-param: script to view command line parameters
+
+echo "
+Number of arguments: $#
+\$0 = $0
+\$1 = $1
+\$2 = $2
+\$12 = ${12}	#if parameter number more than nine, to specify surround the number in braces
+"
+count=1
+
+set -x
+while [[ $# -gt 0 ]]; do
+	echo "Argument $count = $1"
+	count=$((count + 1))
+	shift		# each time shift is executed, the value of $2 is moved to $1, the value of $3 is moved to $2, and so on. The value of $# is also reduced by 1.
+done
+set +x

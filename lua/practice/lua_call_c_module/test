@@ -1,0 +1,5 @@
+#!/usr/local/bin/lua
+
+local module = require "mylib"
+print(module.add(1.1, 2))
+print(module.sub(2, 3))

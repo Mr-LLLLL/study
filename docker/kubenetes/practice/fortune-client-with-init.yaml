@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fortune-client
+spec:
+  initContainers:
+  - name: init
+    image: busybox
+    command:
+    - sleep
+    - "10"
+  containers:
+  - name: fortune-client
+    image: luksa/kubia:v1
+

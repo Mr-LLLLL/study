@@ -1,0 +1,43 @@
+#!/bin/bash
+# if add -x option, will tracing full text
+export PS4='$LINENO + '		#modify -x option prefix
+
+# trouble: script to demonstrate common errors
+
+number=1
+
+if [ $number == 1 ]; then
+	echo "Number is equal to 1."
+else
+	echo "Number is not equal to 1."
+fi
+
+# trouble: script to demonstrate common errors
+
+number=
+
+if [ "$number" == 1 ]; then
+	echo "Number is equal to 1."
+else
+	echo "Number is not eqaul to 1."
+fi
+
+# prevent delete file that you not delete to and verify the process step by step processing
+
+set -x # Turn on tracing
+echo "#####Preparing to delete files" >&2
+if [[ -d $dir_name ]]; then
+	if cd $dir_name; then
+		echo rm * # TESTING
+echo "#####deleting files" >&2
+	else
+		echo "cannot cd to '$dir_name'" >&2
+		exit 1
+	fi
+else
+	echo "no such directory: '$dir_name'" >&2
+	exit 1
+fi
+echo "#####file deletion complate" >&2
+set +x # Turn off tracing
+exit # TESTING

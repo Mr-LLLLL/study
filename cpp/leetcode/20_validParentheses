@@ -1,0 +1,48 @@
+#include <iostream>
+#include <map>
+#include <stack>
+
+using namespace std;
+
+bool isValid(const string &s) {
+	map<char, char> m;
+	m[')'] = '(';
+	m[']'] = '[';
+	m['}'] = '{';
+	stack<char> sta;
+	for (size_t i = 0; i < s.size(); ++i) {
+		char c = s[i];
+		if (!m.count(c))
+			sta.push(c);
+		else {
+			char ch;
+			if (sta.empty())
+				ch = '2';
+			else {
+				ch = sta.top();
+				sta.pop();
+			}
+			if (ch != m[c])
+				return false;
+		}
+	}
+	
+	return sta.empty();
+}
+
+int main(int argc, char **argv)
+{
+	string s;
+	while (cout << "please input brackets:", cin >> s) {
+		try {
+			if (s.size() & 1)
+				throw "invalid input, please reinput:";
+		} catch (const char *e) {
+			cerr << e << endl;
+			continue;
+		}
+		cout << isValid(s) << endl;
+	}
+
+	return 0;
+}

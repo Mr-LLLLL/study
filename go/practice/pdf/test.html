@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style type="text/css">
+        body {
+            width: 888px;
+            margin: 0 auto;
+            font-size: 12px;
+        }
+
+        .template-page {
+            color: #262626;
+            padding: 24px;
+        }
+
+        .time {
+            margin-bottom: 10px;
+        }
+
+        .title {
+            font-size: 24px;
+            line-height: 33px;
+            font-weight: bolder;
+            text-align: center;
+        }
+
+        .info-title {
+            font-size: 17px;
+            line-height: 24px;
+            margin-bottom: 10px;
+            font-weight: bolder;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .info-box {
+            margin-bottom: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            border: 1px solid #e5e5e5;
+            width: 100%;
+        }
+
+        table tr {
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        table tr th,
+        table tr td {
+            text-align: left;
+            padding: 12px;
+        }
+
+        table tr th {
+            background-color: #fafafa;
+        }
+
+        table tr td span {
+            display: inline-block;
+            line-height: 16px;
+            word-break: break-all;
+            vertical-align: bottom;
+        }
+
+        /* 二等分表格 */
+        .halve {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: center;
+            border: 1px solid #e5e5e5;
+            box-sizing: border-box;
+            border-bottom: none;
+        }
+
+        .header {
+            width: 100%;
+            background-color: #f0f0f0;
+            box-sizing: border-box;
+            padding: 12px;
+            font-weight: bold;
+            border: 1px solid #e5e5e5;
+            border-bottom: none;
+            position: relative;
+        }
+
+        .list-box {
+            width: 50%;
+            box-sizing: border-box;
+            padding: 12px;
+            border-bottom: 1px solid #e5e5e5;
+            position: relative;
+        }
+
+        .list-box:nth-child(odd) {
+            border-right: 1px solid #e5e5e5;
+        }
+
+        .entireLine {
+            width: 100%;
+            border-right: none !important;
+            position: relative;
+        }
+
+        .entireLine:before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: #e5e5e5;
+        }
+
+        .list-box img {
+            display: block;
+            max-width: 100%;
+            max-height: 453px;
+            overflow: hidden;
+            background-color: #f2f2f2;
+            margin: 10px auto 0;
+        }
+
+        .halve-table tr td span {
+            width: 396px;
+        }
+
+        .halve-table img {
+            display: block;
+            max-width: 100%;
+            max-height: 453px;
+            overflow: hidden;
+            background-color: #f2f2f2;
+            margin: 10px auto 0;
+        }
+
+        .halve-table tr td:nth-child(2n - 1) {
+            border-right: 1px solid #e5e5e5;
+        }
+
+        .halve-table:last-child {
+            margin-top: 10px;
+        }
+
+        /* 商品基础信息表格 */
+        .basic tr td span {
+            width: 111px;
+        }
+        .basic .first-child span {
+            width: 276px;
+            word-break: break-all;
+        }
+
+         /*单列表格*/
+        .singleRow-table tr td span{
+            width: 816px;
+        }
+        /*新二等分表格*/
+        .halve-table-new tr td span {
+            width: 396px;
+        }
+        /*三等分表格*/
+        .trisection-table tr td span {
+            width: 256px;
+        }
+        /* 四等分表格 */
+        .quartering-table tr td span {
+            width: 186px;
+        }
+        /* 五等分表格 */
+        .quintile-table tr td span {
+            width: 144px;
+        }
+        /* 六等分表格 */
+        .six-equal-table tr td span {
+            width: 116px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="template-page">
+        <div class="time">打印时间：</div>
+        <div class="title"></div>
+        
+        <div class="info-box">
+            <div class="info-title">订单信息</div>
+            <table class="halve-table">
+                
+                <tr>
+                    <td><span>skfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfjjjjjjjjjjjjjjjjjjjjjjskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfj</span></td>
+                    <td><span>skfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfjjjjjjjjjjjjjjjjjjjjjjskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfjskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfjjjjjjjjjjjjjjjjjjjjjjskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfjjjjjjjjjjjjjjjjjjjjjjskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfjjjjjjjjjjjjjjjjjjjjjjskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfjjjjjjjjjjjjjjjjjjjjjjskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfjjjjjjjjjjjjjjjjjjjjjjskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfjjjjj</span></td>
+                </tr>
+                
+                <tr>
+                    <td><span></span></td>
+                    <td><span></span></td>
+                </tr>
+                
+                
+                <tr>
+                    <td><span>skfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfjjjjjjjjjjjjjjjjjjjjjjskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfjjjjjjjjjjjjjjjjjjjjjjskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfjjjjjjjjjjjjjjjjjjjjjjskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfjjjjjjjjjjjjjjjjjjjjjjskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfjjjjskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfjjjjjjjjjjjjjjjjjjjjjjskfjsdkfjkdfkskdjfslkjfkslfjkslfjslkfj</span></td>
+                    <td><span></span></td>
+                </tr>
+                
+                
+                <tr>
+                    <td><span></span></td>
+                    <td><span></span></td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td colspan="2">
+                        <span>凭证：</span>
+                        
+                        <img src= alt=>
+                        
+                    </td>
+                </tr>
+                
+            </table>
+        </div>
+        
+        
+        <div class="info-box">
+            <div class="info-title">订单自定义字段</div>
+            <table class="halve-table">
+                
+                <tr>
+                    
+                    <td><span></span></td>
+                    
+                </tr>
+                
+            </table>
+        </div>
+        
+        
+        <div class="info-box">
+            <div class="info-title">商品基础信息</div>
+            <table class="basic">
+                <tr>
+                    
+                    <th><span>商品</span></th>
+                    
+                    
+                    <th><span>单价(元)</span></th>
+                    
+                    
+                    <th><span>数量</span></th>
+                    
+                    
+                    <th><span>折扣</span></th>
+                    
+                    
+                    <th><span>折后总价(元)</span></th>
+                    
+                </tr>
+                
+                <tr>
+                    
+                    <td class="first-child">
+                        <span></span>
+                    </td>
+                    
+                    
+                    <td><span></span></td>
+                    
+                    
+                    <td><span></span></td>
+                    
+                    
+                    <td><span></span></td>
+                    
+                    
+                    <td><span></span></td>
+                    
+                </tr>
+                
+            </table>
+        </div>
+        
+        
+        <div class="info-box">
+            <div class="info-title">结算信息</div>
+            <table class="halve-table">
+                
+                <tr>
+                    
+                    <td><span></span></td>
+                    
+                </tr>
+                
+            </table>
+        </div>
+        
+        
+        <div class="info-box">
+            <div class="info-title">发货信息</div>
+            <table class="halve-table">
+                
+                <tr>
+                    
+                    <td><span></span></td>
+                    
+                </tr>
+                
+            </table>
+        </div>
+        
+        
+        <div class="info-box">
+            <div class="info-title">回款计划</div>
+            
+            <table class="basic">
+            
+            
+            <table class="halve-table-new">
+            
+            
+            <table class="trisection-table">
+            
+            
+            <table class="quartering-table">
+            
+            
+            <table class="quintile-table">
+            
+            
+            <table class="six-equal-table">
+            
+                <tr>
+                    
+                    <th><span>期次</span></th>
+                    
+                    
+                    <th><span>计划回款金额(元)</span></th>
+                    
+                    
+                    <th><span>计划回款占比</span></th>
+                    
+                    
+                    <th><span>计划回款日期</span></th>
+                    
+                    
+                    <th><span>提醒日期</span></th>
+                    
+                    
+                    <th><span>回款状态</span></th>
+                    
+                </tr>
+                
+                <tr>
+                    
+                    <td><span></span></td>
+                    
+                    
+                    <td><span></span></td>
+                    
+                    
+                    <td><span></span></td>
+                    
+                    
+                    <td><span></span></td>
+                    
+                    
+                    <td><span></span></td>
+                    
+                    
+                    <td><span></span></td>
+                    
+                </tr>
+                
+            </table>
+        </div>
+        
+        
+        <div class="info-box">
+            <div class="info-title">回款单</div>
+            
+            <table class="basic">
+            
+            
+            <table class="halve-table-new">
+            
+            
+            <table class="trisection-table">
+            
+            
+            <table class="quartering-table">
+            
+            
+            <table class="quintile-table">
+            
+            
+            <table class="six-equal-table">
+            
+                <tr>
+                    
+                    <th><span>回款时间</span></th>
+                    
+                    
+                    <th><span>回款金额(元)</span></th>
+                    
+                    
+                    <th><span>打款人</span></th>
+                    
+                    
+                    <th><span>回款方式</span></th>
+                    
+                </tr>
+                
+                <tr>
+                    
+                    <td><span></span></td>
+                    
+                    
+                    <td><span></span></td>
+                    
+                    
+                    <td><span></span></td>
+                    
+                    
+                    <td><span></span></td>
+                    
+                </tr>
+                
+            </table>
+        </div>
+        
+        
+        <div class="info-box">
+            <div class="info-title">发票信息</div>
+            
+            <table class="halve-table">
+                <tr>
+                    <th colspan="2"><span>发票 </span></th>
+                </tr>
+                
+                <tr>
+                    
+                    <td><span></span></td>
+                    
+                </tr>
+                
+            </table>
+            
+        </div>
+        
+        
+        <div class="info-box">
+            <div class="info-title">订单审核</div>
+            
+            <table class="basic">
+            
+            
+            <table class="halve-table-new">
+            
+            
+            <table class="trisection-table">
+            
+            
+            <table class="quartering-table">
+            
+            
+            <table class="quintile-table">
+            
+            
+            <table class="six-equal-table">
+            
+                <tr>
+                    
+                    <th><span>审核人姓名</span></th>
+                    
+                    
+                    <th><span>审核时间</span></th>
+                    
+                    
+                    <th><span>审核原因</span></th>
+                    
+                    
+                    <th><span>审核状态</span></th>
+                    
+                </tr>
+                
+                <tr>
+                    
+                    <td><span></span></td>
+                    
+                    
+                    <td><span></span></td>
+                    
+                    
+                    <td><span></span></td>
+                    
+                    
+                    <td><span></span></td>
+                    
+                </tr>
+                
+            </table>
+        </div>
+        
+        
+        <div class="info-box">
+            <div class="info-title">售后信息</div>
+            <table class="halve-table">
+                
+                <tr>
+                    
+                    <td><span></span></td>
+                    
+                </tr>
+                
+                
+                <tr>
+                    <td colspan="2">
+                        <span>售后凭证：</span>
+                        
+                        <img src= alt=>
+                        
+                    </td>
+                </tr>
+                
+            </table>
+        </div>
+        
+    </div>
+    <div style="page-break-after:always; "></div>
+</body>
+
+</html>

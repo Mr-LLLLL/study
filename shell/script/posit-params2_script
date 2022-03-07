@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# posit-param : script to demonstrate $* and $@
+
+print_params () {
+	echo "\$1 = $1"
+	echo "\$2 = $2"
+	echo "\$3 = $3"
+	echo "\$4 = $4"
+}
+pass_params () {
+	echo -e "\n" '$* :';	print_params $*
+	echo -e "\n" '"$*" :';	print_params "$*"
+	echo -e "\n" '$@ :';	print_params $@
+	echo -e "\n" '"$@" :';	print_params "$@"	#$@ is by far the most useful for most situations
+}
+
+pass_params "word" "words with spaces"
+	
+	
+	
+	
+	
