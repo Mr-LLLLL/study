@@ -56,7 +56,38 @@ func getsli() []string {
 const t = -1
 
 func main() {
+	defer func() {
+		msg := recover()
+		err := fmt.Errorf("%v", msg)
+		fmt.Println(err)
+	}()
+	panic("skdjk")
+}
 
+func testerr() (err error) {
+	defer func() {
+		if err != nil {
+			fmt.Println(err)
+		}
+	}()
+	{
+		b, err := makeerr("hello")
+		if err != nil {
+			return err
+		}
+		fmt.Println(b)
+	}
+
+	c, err := makeerr("world")
+	if err != nil {
+		return err
+	}
+	fmt.Println(c)
+	return
+}
+
+func makeerr(key string) (bool, error) {
+	return false, fmt.Errorf(key)
 }
 
 func Copy(dst, src interface{}) {
