@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math/rand"
+	"sync"
 	"time"
 )
 
@@ -55,13 +57,71 @@ func getsli() []string {
 
 const t = -1
 
+var mu sync.Mutex
+
+type Gmu struct {
+	mu *sync.Mutex
+}
+
+func NewGmu() *Gmu {
+	return &Gmu{
+		mu: &mu,
+	}
+}
+
+// 初始化随机数种子
+func Init() {
+	rand.Seed(time.Now().UnixNano())
+}
+
 func main() {
-	defer func() {
-		msg := recover()
-		err := fmt.Errorf("%v", msg)
-		fmt.Println(err)
-	}()
-	panic("skdjk")
+	Init()
+	// 两个协程
+	wg := sync.WaitGroup{}
+	wg.Add(2)
+
+	// 无缓存通道
+	court := make(chan int)
+
+	// 接收通道数据让协程阻塞
+	go player("张三", court, &wg)
+	go player("李四", court, &wg)
+
+	// 由main做裁判发球
+	court <- 1
+
+	wg.Wait()
+}
+
+func player(name string, court chan int, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	// 打球的过程
+	for {
+		// 接受通道数据，形成阻塞
+		// 由于ball还要给下面使用，所以这里和if语句分开写
+		ball, ok := <-court
+		if !ok {
+			// 通道关闭，我们赢了
+			fmt.Printf("%s 赢了\n", name)
+			return
+		}
+
+		// 利用随机数模拟失误，自己失误了，关闭通道，另外
+		// 一个被阻塞的协程就立即获得，从阻塞中恢复过来，并输出自己赢了
+		if n := rand.Intn(1000); n%13 == 0 {
+			fmt.Printf("%s 没接住 ", name)
+			close(court)
+			return
+		}
+
+		// 否则就是把球打回去了
+		fmt.Printf("%s打中了%d\n", name, ball)
+		ball++
+		// 发送数据到通道，让另外一个协程从阻塞中拿到通道数据
+		court <- ball
+	}
+
 }
 
 func testerr() (err error) {
@@ -72,6 +132,8 @@ func testerr() (err error) {
 	}()
 	{
 		b, err := makeerr("hello")
+		s := 1
+		fmt.Println(s)
 		if err != nil {
 			return err
 		}
