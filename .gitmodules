@@ -4,3 +4,6 @@
 [submodule "go/etcd"]
 	path = go/etcd
 	url = https://github.com/etcd-io/etcd.git
+[submodule "go/go-datastructures"]
+	path = go/go-datastructures
+	url = https://github.com/Workiva/go-datastructures.git
