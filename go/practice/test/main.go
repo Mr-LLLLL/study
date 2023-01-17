@@ -10,13 +10,13 @@ import (
 )
 
 type S1 struct {
-	S string
+	S string `json:"s"`
 }
 
 type S struct {
-	A1  string `json:"a1"`
-	B1  *S1    `json:"b1"`
-	Sli []string
+	A1  string   `json:"a1"`
+	B1  *S1      `json:"b1"`
+	Sli []string `json:"sli"`
 }
 
 func (s *S) Add() {
@@ -24,8 +24,8 @@ func (s *S) Add() {
 }
 
 type Pair struct {
-	Key   string
-	Value string
+	Key       string `gorm:"key" json:"key"`
+	ValueTest string `gorm:"valueTest" json:"valueTest"`
 }
 
 type Slice struct {
@@ -38,14 +38,14 @@ func (s *Slice) Append(key, value string) {
 	if isFull {
 		pair := [2]Pair{
 			{
-				Key:   key,
-				Value: value,
+				Key:       key,
+				ValueTest: value,
 			},
 		}
 		s.Paris = append(s.Paris, pair)
 	} else {
 		s.Paris[len(s.Paris)-1][1].Key = key
-		s.Paris[len(s.Paris)-1][1].Value = value
+		s.Paris[len(s.Paris)-1][1].ValueTest = value
 	}
 	s.Len++
 }
@@ -75,22 +75,23 @@ func Init() {
 }
 
 func main() {
-	Init()
-	// 两个协程
-	wg := sync.WaitGroup{}
-	wg.Add(2)
+	fmt.Print("hello")
+	fmt.Println("hello")
+	fmt.Print("hello")
+	fmt.Print("hello")
+	fmt.Print("hello")
+	fmt.Print("hello")
+	fmt.Print("hello")
+	fmt.Print("hello")
+	i := 0
+	fmt.Print(i)
+	j := i
+	c := j
+	fmt.Println(c)
+}
 
-	// 无缓存通道
-	court := make(chan int)
-
-	// 接收通道数据让协程阻塞
-	go player("张三", court, &wg)
-	go player("李四", court, &wg)
-
-	// 由main做裁判发球
-	court <- 1
-
-	wg.Wait()
+func test11(a, b, c int) int {
+	return 1
 }
 
 func player(name string, court chan int, wg *sync.WaitGroup) {
