@@ -74,20 +74,16 @@ func Init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
+type T1 struct {
+	i int
+}
+
 func main() {
-	fmt.Print("hello")
-	fmt.Println("hello")
-	fmt.Print("hello")
-	fmt.Print("hello")
-	fmt.Print("hello")
-	fmt.Print("hello")
-	fmt.Print("hello")
-	fmt.Print("hello")
-	i := 0
-	fmt.Print(i)
-	j := i
-	c := j
-	fmt.Println(c)
+	t := T1{
+		i: 0,
+	}
+
+	fmt.Print(t)
 }
 
 func test11(a, b, c int) int {
