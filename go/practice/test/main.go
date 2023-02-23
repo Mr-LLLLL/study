@@ -10,7 +10,7 @@ import (
 )
 
 type S1 struct {
-	S string `json:"s"`
+	string `json:"s"`
 }
 
 type S struct {
@@ -79,11 +79,18 @@ type T1 struct {
 }
 
 func main() {
-	t := T1{
-		i: 0,
+	fmt.Printf("%s", "hello")
+	ch := make(chan int)
+	ch <- 1
+	go func() {
+		ch <- 1
+		go func() {
+			ch <- 2
+		}()
+	}()
+	for v := range ch {
+		fmt.Print(v)
 	}
-
-	fmt.Print(t)
 }
 
 func test11(a, b, c int) int {
