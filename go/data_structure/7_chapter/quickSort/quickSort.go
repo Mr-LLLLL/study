@@ -1,12 +1,16 @@
 package quickSort
 
-func QuickSort(arr []int, lo, hi int) []int {
+func QuickSort(arr []int) {
+	quickSort(arr, 0, len(arr))
+}
+
+func quickSort(arr []int, lo, hi int) []int {
 	if hi-lo < 2 {
 		return nil
 	}
 	mi := partition(arr, lo, hi)
-	QuickSort(arr, lo, mi)
-	QuickSort(arr, mi+1, hi)
+	quickSort(arr, lo, mi)
+	quickSort(arr, mi+1, hi)
 	return arr
 }
 
