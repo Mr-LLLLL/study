@@ -79,18 +79,7 @@ type T1 struct {
 }
 
 func main() {
-	fmt.Printf("%s", "hello")
-	ch := make(chan int)
-	ch <- 1
-	go func() {
-		ch <- 1
-		go func() {
-			ch <- 2
-		}()
-	}()
-	for v := range ch {
-		fmt.Print(v)
-	}
+	TestWithInput()
 }
 
 func test11(a, b, c int) int {
