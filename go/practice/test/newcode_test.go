@@ -1,9 +1,15 @@
 package main
 
 import (
+	"fmt"
+	"os"
 	"reflect"
 	"testing"
 )
+
+func Test_test(t *testing.T) {
+	fmt.Println(os.Stat("./main.go"))
+}
 
 func Test_emptyBottle(t *testing.T) {
 	type args struct {

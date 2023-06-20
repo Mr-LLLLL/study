@@ -7,6 +7,6 @@
 #done < test
 
 
-cat test | while read one two three; do
+while read -p "enter" one two three; do
 	printf "one: %s\ttwo: %s\tthree: %s\n" $one $two $three
 done

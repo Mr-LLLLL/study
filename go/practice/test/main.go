@@ -1,184 +1,104 @@
 package main
 
 import (
-	"context"
-	"encoding/json"
 	"fmt"
-	"math/rand"
-	"sync"
-	"time"
+	_ "net/http/pprof"
+	"os"
+
+	"golang.org/x/net/context"
 )
 
-type S1 struct {
-	string `json:"s"`
+type Resp struct {
+	Code   int         `json:"code"`
+	Data   interface{} `json:"data"`
+	ErrMsg string      `json:"errMsg"`
 }
 
-type S struct {
-	A1  string   `json:"a1"`
-	B1  *S1      `json:"b1"`
-	Sli []string `json:"sli"`
+type Res struct {
+	Name string
 }
 
-func (s *S) Add() {
-	s.A1 += "hello"
+type EngineTaskUpdateBO struct {
+	ID           int `yaml:"taskId"`
+	TaskProgress int `yaml:"taskProgress"`
 }
 
-type Pair struct {
-	Key       string `gorm:"key" json:"key"`
-	ValueTest string `gorm:"valueTest" json:"valueTest"`
+type LiveNotifyReq struct {
+	EngineTaskUpdateBOList []EngineTaskUpdateBO `yaml:"engineScaTaskUpdateBOList"`
 }
 
-type Slice struct {
-	Len   int
-	Paris [][2]Pair
+type valuemap struct {
+	ctx context.Context
+	res string
 }
 
-func (s *Slice) Append(key, value string) {
-	isFull := s.Len&1 == 0
-	if isFull {
-		pair := [2]Pair{
-			{
-				Key:       key,
-				ValueTest: value,
-			},
-		}
-		s.Paris = append(s.Paris, pair)
-	} else {
-		s.Paris[len(s.Paris)-1][1].Key = key
-		s.Paris[len(s.Paris)-1][1].ValueTest = value
-	}
-	s.Len++
+type In interface {
+	Print()
 }
 
-func getsli() []string {
-	fmt.Println("call")
-	return []string{"1", "2", "3"}
+type str struct{}
+
+func (str) Print() {}
+
+type str1 struct{}
+
+func (str1) Print() {}
+
+func test() {
+	t := "test"
+	defer fmt.Println(t)
+	t = "hello"
+	defer fmt.Println(t)
 }
 
-const t = -1
-
-var mu sync.Mutex
-
-type Gmu struct {
-	mu *sync.Mutex
-}
-
-func NewGmu() *Gmu {
-	return &Gmu{
-		mu: &mu,
-	}
-}
-
-// 初始化随机数种子
-func Init() {
-	rand.Seed(time.Now().UnixNano())
-}
-
-type T1 struct {
-	i int
+func link() {
+	os.Link(os.Args[1], os.Args[2])
+	os.Remove(os.Args[1])
 }
 
 func main() {
-	TestWithInput()
+	fmt.Println("skjd")
 }
 
-func test11(a, b, c int) int {
-	return 1
+type config struct {
+	Mode   string `yaml:"mode" default:"release"` // opt:1-release 2-test 3-debug
+	TmpDir string `yaml:"tmp_dir" default:"/tmp/sca"`
+
+	HttpServer httpServer `yaml:"http_server"`
+	HttpClient httpClient `yaml:"http_client"`
+	Log        log1       `yaml:"log"`
+	Hdfs       hdfs       `yaml:"hdfs"`
+
+	WebTask webTask `yaml:"web_task"`
 }
 
-func player(name string, court chan int, wg *sync.WaitGroup) {
-	defer wg.Done()
-
-	// 打球的过程
-	for {
-		// 接受通道数据，形成阻塞
-		// 由于ball还要给下面使用，所以这里和if语句分开写
-		ball, ok := <-court
-		if !ok {
-			// 通道关闭，我们赢了
-			fmt.Printf("%s 赢了\n", name)
-			return
-		}
-
-		// 利用随机数模拟失误，自己失误了，关闭通道，另外
-		// 一个被阻塞的协程就立即获得，从阻塞中恢复过来，并输出自己赢了
-		if n := rand.Intn(1000); n%13 == 0 {
-			fmt.Printf("%s 没接住 ", name)
-			close(court)
-			return
-		}
-
-		// 否则就是把球打回去了
-		fmt.Printf("%s打中了%d\n", name, ball)
-		ball++
-		// 发送数据到通道，让另外一个协程从阻塞中拿到通道数据
-		court <- ball
-	}
-
+type log1 struct {
+	Level          string `yaml:"level" default:"info"` // opt:1-trace 2-debug 3-info 4-warn 日志级别,只输出配置及其以上日志
+	Directory      string `yaml:"directory" default:"/var/xm/sca/log"`
+	SavedDays      int    `yaml:"saved_days" default:"15"`           // 日志存储时间
+	MaxSizeForEach int    `yaml:"max_size_for_each" default:"40000"` // 单条日志最大限制，单位：Byte，默认40KB
 }
 
-func testerr() (err error) {
-	defer func() {
-		if err != nil {
-			fmt.Println(err)
-		}
-	}()
-	{
-		b, err := makeerr("hello")
-		s := 1
-		fmt.Println(s)
-		if err != nil {
-			return err
-		}
-		fmt.Println(b)
-	}
-
-	c, err := makeerr("world")
-	if err != nil {
-		return err
-	}
-	fmt.Println(c)
-	return
+type httpServer struct {
+	ListenPort   int `yaml:"listen_port" default:"5000"`
+	ReadTimeout  int `yaml:"read_timeout" default:"300"`  // http服务端读取所有数据超时时间，300s
+	WriteTimeout int `yaml:"write_timeout" default:"300"` // http服务端写入所有数据超时时间，300s
 }
 
-func makeerr(key string) (bool, error) {
-	return false, fmt.Errorf(key)
+type httpClient struct {
+	SkipHttpsVerify bool `yaml:"skip_https_verify" default:"false"`
+	Timeout         int  `yaml:"timeout" default:"600"` // http客户端连接超时时间，600s
 }
 
-func Copy(dst, src interface{}) {
-	b, err := json.Marshal(src)
-	if err != nil {
-		return
-	}
-
-	json.Unmarshal(b, dst)
+type webTask struct {
+	Host             string `yaml:"host" default:"http://127.0.0.1"`
+	Port             int    `yaml:"port" default:"8090"`
+	ParallelCount    int    `yaml:"parallel_count" default:"5"`
+	HeartBeatInteral int    `yaml:"heart_beat_interal" default:"10"` // 10 second
+	ListPullInteral  int    `yaml:"list_pull_interal" default:"10"`  // 10 second
 }
 
-func test() {
-	arr := [1000000]int{1, 2, 3}
-	for i := range arr[:] {
-		_ = arr[i]
-		time.Sleep(time.Second)
-	}
-}
-
-func test1() {
-	arr1 := [1000000]int{1, 1, 1}
-	for i := range arr1 {
-		_ = arr1[i]
-		time.Sleep(time.Second)
-	}
-}
-
-func watch(ctx context.Context, name string) {
-	for {
-		select {
-		case <-ctx.Done():
-			fmt.Println(")finish", name)
-			return
-		default:
-			fmt.Println("continue", name)
-			time.Sleep(10 * time.Second)
-		}
-	}
+type hdfs struct {
+	Host string `yaml:"host" default:"http://10.1.2.32"`
+	Port int    `yaml:"port" default:"9870"`
 }
