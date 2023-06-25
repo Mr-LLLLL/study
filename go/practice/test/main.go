@@ -4,6 +4,8 @@ import (
 	"fmt"
 	_ "net/http/pprof"
 	"os"
+	"sync"
+	"time"
 
 	"golang.org/x/net/context"
 )
@@ -57,7 +59,21 @@ func link() {
 }
 
 func main() {
-	fmt.Println("skjd")
+	m := make(map[string]int)
+	mu := sync.Mutex{}
+	for i := 0; i < 3; i++ {
+		go func() {
+			for {
+				mu.Lock()
+				m["hello"] = 1
+				mu.Unlock()
+			}
+		}()
+	}
+
+	time.Sleep(time.Second)
+
+	fmt.Println(m)
 }
 
 type config struct {
