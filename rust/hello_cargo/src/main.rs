@@ -88,6 +88,25 @@ enum Coin {
     Quater(UsState),
 }
 
+fn string_practice() {
+    let hello = String::from("Здравствуйте");
+    println!("{hello}");
+    println!("{}", &hello[0..4]);
+
+    for c in "Зд".chars() {
+        println!("{c}");
+    }
+}
+
+fn hashmap_practice() {
+    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+}
+
 fn main() {
     println!("Hello, world!");
 
@@ -192,6 +211,9 @@ fn main() {
     if let Some(max) = config_max {
         println!("The maximum is configured to be {}", max);
     }
+
+    string_practice();
+    hashmap_practice();
 }
 
 fn add_fancy_hat() {}
