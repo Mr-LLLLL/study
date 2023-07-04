@@ -1,13 +1,24 @@
 package main
 
 import (
+	"bytes"
+	"crypto/tls"
 	"fmt"
+	"io"
+	"log"
+	"mime/multipart"
+	"net/http"
 	_ "net/http/pprof"
 	"os"
-	"sync"
-	"time"
+	"path/filepath"
+	"runtime"
 
 	"golang.org/x/net/context"
+)
+
+const (
+	MB = 1024 * 1024
+	GB = 1024 * MB
 )
 
 type Resp struct {
@@ -58,22 +69,70 @@ func link() {
 	os.Remove(os.Args[1])
 }
 
-func main() {
-	m := make(map[string]int)
-	mu := sync.Mutex{}
-	for i := 0; i < 3; i++ {
-		go func() {
-			for {
-				mu.Lock()
-				m["hello"] = 1
-				mu.Unlock()
-			}
-		}()
+type ProgramMem struct {
+	HeapAlloc  uint64
+	StackAlloc uint64
+}
+
+func GetProgramMem() ProgramMem {
+	ms := new(runtime.MemStats)
+	runtime.ReadMemStats(ms)
+
+	return ProgramMem{
+		HeapAlloc:  ms.HeapAlloc / MB,
+		StackAlloc: ms.StackSys / MB,
+	}
+}
+
+func recursive(s string, dep int) {
+	if dep > 1000 {
+		return
 	}
 
-	time.Sleep(time.Second)
+	fmt.Println(GetProgramMem())
+	recursive(s, dep+1)
+}
 
-	fmt.Println(m)
+func main() {
+	form := new(bytes.Buffer)
+	writer := multipart.NewWriter(form)
+	fw, err := writer.CreateFormFile("file", filepath.Base("/tmp/xm-cli/zip/32499367389312.tar.gz"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	fd, err := os.Open("/tmp/xm-cli/zip/32499367389312.tar.gz")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer fd.Close()
+	_, err = io.Copy(fw, fd)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	writer.Close()
+
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: tr}
+	req, err := http.NewRequest("POST", "http://10.1.4.2:8090/sca/api-v1/open-api-v1/package/task/add?clientType=4", form)
+	if err != nil {
+		log.Fatal(err)
+	}
+	req.Header.Set("OpenApiProjectToken", "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
+	req.Header.Set("OpenApiUserToken", "6b906a14493644af801efbcdee7cd390")
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+	bodyText, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%s\n", bodyText)
 }
 
 type config struct {
