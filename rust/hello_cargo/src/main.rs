@@ -1,3 +1,19 @@
+mod back_of_house;
+mod front_of_house;
+
+use std::fmt::Result;
+use std::io::Result as IoResult;
+use std::io::{self, Write};
+use std::{collections::*, vec};
+
+fn deliver_order() {}
+
+pub use crate::front_of_house::hosting;
+
+pub fn eat_at_restaurant() {
+    hosting::add_to_awatlist();
+}
+
 #[derive(Debug)]
 struct User {
     active: bool,
@@ -88,7 +104,9 @@ enum Coin {
     Quater(UsState),
 }
 
-fn main() {
+fn base_practice() {
+    deliver_order();
+
     println!("Hello, world!");
 
     variable();
@@ -192,6 +210,58 @@ fn main() {
     if let Some(max) = config_max {
         println!("The maximum is configured to be {}", max);
     }
+}
+
+fn vector_practice() {
+    let mut v: Vec<i32> = Vec::new();
+    v.push(5);
+
+    let first: &i32 = &v[0];
+
+    println!("{first}");
+
+    let v1 = vec![1, 2, 3];
+    let third: Option<&i32> = v1.get(2);
+    match third {
+        Some(third) => println!("{third}"),
+        None => println!("no"),
+    }
+
+    for i in &mut v {
+        *i += 50;
+        println!("{i}");
+    }
+
+    enum SpreadsheetCell {
+        Int(i32),
+        Float(f64),
+        Text(String),
+    }
+
+    let row = vec![
+        SpreadsheetCell::Int(3),
+        SpreadsheetCell::Text(String::from("blue")),
+        SpreadsheetCell::Float(10.12),
+    ];
+}
+
+fn string_practice() {
+    let data = "initial contents";
+
+    let mut s = "initial contents".to_string();
+
+    s.push_str("bar");
+
+    s = s + data;
+
+    println!("{data}, {s}");
+
+    let s = format!("{s}-{data}");
+    println!("{s}");
+}
+
+fn main() {
+    string_practice();
 }
 
 fn add_fancy_hat() {}
