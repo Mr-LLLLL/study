@@ -1,10 +1,11 @@
 mod back_of_house;
 mod front_of_house;
 
-use std::fmt::Result;
-use std::io::Result as IoResult;
-use std::io::{self, Write};
-use std::{collections::*, vec};
+use std::fmt::{Display, Result};
+use std::fs::{self, File};
+use std::io::{self, Read, Write};
+use std::io::{ErrorKind, Result as IoResult};
+use std::{collections::*, panic, result, vec};
 
 fn deliver_order() {}
 
@@ -215,16 +216,6 @@ fn base_practice() {
     hashmap_practice();
 }
 
-fn string_practice() {
-    let hello = String::from("Здравствуйте");
-    println!("{hello}");
-    println!("{}", &hello[0..4]);
-
-    for c in "Зд".chars() {
-        println!("{c}");
-    }
-}
-
 fn hashmap_practice() {
     use std::collections::HashMap;
 
@@ -302,10 +293,184 @@ fn string_practice() {
 
     let s = format!("{s}-{data}");
     println!("{s}");
+
+    let hello = String::from("Здравствуйте");
+    println!("{hello}");
+    println!("{}", &hello[0..4]);
+
+    for c in "Зд".chars() {
+        println!("{c}");
+    }
+}
+
+fn read_username_from_file() -> io::Result<String> {
+    fs::read_to_string("hello.txt")
+}
+
+fn err_result() {
+    let greeting_file_result = File::open("hello.text");
+    let greeting_file = match greeting_file_result {
+        Ok(file) => file,
+        Err(error) => panic!("Problem Opening the file: {:?}", error),
+    };
+
+    let greeting_file_result1 = File::open("hello.txt").unwrap_or_else(|error| {
+        if error.kind() == ErrorKind::NotFound {
+            File::create("hello.txt").unwrap_or_else(|error| {
+                panic!("Problem creating the file: {:?}", error);
+            })
+        } else {
+            panic!("Problem opening the file: {:?}", error);
+        }
+    });
+
+    let greeting_file_result2 =
+        File::open("hello.txt").expect("hello.text should be included in this project");
+}
+
+fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> &T {
+    let mut largest = &list[0];
+
+    for item in list {
+        if item > largest {
+            largest = item;
+        }
+    }
+
+    largest
+}
+
+fn template() {
+    let mut number_list = vec![1, 2, 34, 5];
+    number_list.push(40);
+    let result = largest(&number_list);
+    println!("{result}");
+
+    let char_list = vec!['y', 'm', 'z'];
+    let result = largest(&char_list);
+    println!("{result}");
+
+    let interger = Point { x: 5, y: 10 };
+    let float = Point { x: 1.0, y: 4.0 };
+}
+
+struct Point<T> {
+    x: T,
+    y: T,
+}
+
+impl<T> Point<T> {
+    fn x(&self) -> &T {
+        &self.x
+    }
+}
+
+impl Point<f32> {
+    fn distance_from_origin(&self) -> f32 {
+        (self.x.powi(2) + self.y.powi(2)).sqrt()
+    }
+}
+
+enum CusOption<T> {
+    Some(T),
+    None,
+}
+
+pub trait Summary {
+    fn summarize(&self) -> String {
+        format!("(Read more from {}...)", self.summarize_author())
+    }
+
+    fn summarize_author(&self) -> String {
+        format!("@unknow")
+    }
+}
+
+pub struct NewsArticle {
+    headline: String,
+    localtion: String,
+    author: String,
+    content: String,
+}
+
+impl Summary for NewsArticle {
+    fn summarize(&self) -> String {
+        format!("(Read more from {}...)", self.summarize_author())
+    }
+}
+
+pub struct Tweet {
+    username: String,
+    content: String,
+    reply: bool,
+    retweet: bool,
+}
+
+impl Summary for Tweet {
+    fn summarize_author(&self) -> String {
+        format!("@{}", self.username)
+    }
+}
+
+pub fn notify(item: &impl Summary) {
+    println!("Breaking news! {}", item.summarize());
+}
+
+pub fn notify_t<T: Summary>(item1: &T, item2: &T) {
+    println!("Breaking new! {}", item1.summarize());
+    println!("Breaking new author {}", item2.summarize_author());
+}
+
+pub fn notify_plus(item: &(impl Summary + Display)) {
+    println!("{item}");
+}
+
+pub fn notify_t_plus<T: Summary + Display>(item: &T) {
+    println!("{item}");
+}
+
+fn trait_practice() {
+    let tweet = Tweet {
+        username: String::from("horse_ebooks"),
+        content: String::from("of course, as you probably already know, people"),
+        reply: false,
+        retweet: false,
+    };
+    notify(&tweet);
+
+    let article = NewsArticle {
+        localtion: String::from("location"),
+        author: String::from("article_author"),
+        content: String::from("nothing"),
+        headline: String::from("News"),
+    };
+    notify(&article);
+
+    notify_t(&tweet, &tweet);
+}
+
+fn some_function<T: Display + Clone, U: Clone + Summary>(t: &T, u: &U) {
+    println!("{t} {}", u.summarize());
+}
+
+fn some_function_where<T, U>(t: &T, u: &U)
+where
+    T: Display + Clone,
+    U: Clone + Summary,
+{
+    println!("{t} {}", u.summarize());
 }
 
 fn main() {
-    string_practice();
+    trait_practice();
+
+    let i = 32;
+
+    if i == 32 {
+        println!("1")
+    }
+
+    println!("2")
 }
 
 fn add_fancy_hat() {}
