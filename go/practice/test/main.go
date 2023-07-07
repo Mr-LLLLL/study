@@ -1,16 +1,10 @@
 package main
 
 import (
-	"bytes"
-	"crypto/tls"
 	"fmt"
-	"io"
-	"log"
-	"mime/multipart"
-	"net/http"
+
 	_ "net/http/pprof"
 	"os"
-	"path/filepath"
 	"runtime"
 
 	"golang.org/x/net/context"
@@ -94,45 +88,19 @@ func recursive(s string, dep int) {
 }
 
 func main() {
-	form := new(bytes.Buffer)
-	writer := multipart.NewWriter(form)
-	fw, err := writer.CreateFormFile("file", filepath.Base("/tmp/xm-cli/zip/32499367389312.tar.gz"))
-	if err != nil {
-		log.Fatal(err)
+	for i := 0; i < 10; i++ {
+		switch i {
+		case 1, 2, 3, 4:
+			if i == 1 {
+				break
+			}
+			fmt.Println(i)
+		}
 	}
-	fd, err := os.Open("/tmp/xm-cli/zip/32499367389312.tar.gz")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer fd.Close()
-	_, err = io.Copy(fw, fd)
-	if err != nil {
-		log.Fatal(err)
-	}
+}
 
-	writer.Close()
-
-	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-	}
-	client := &http.Client{Transport: tr}
-	req, err := http.NewRequest("POST", "http://10.1.4.2:8090/sca/api-v1/open-api-v1/package/task/add?clientType=4", form)
-	if err != nil {
-		log.Fatal(err)
-	}
-	req.Header.Set("OpenApiProjectToken", "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
-	req.Header.Set("OpenApiUserToken", "6b906a14493644af801efbcdee7cd390")
-	req.Header.Set("Content-Type", writer.FormDataContentType())
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer resp.Body.Close()
-	bodyText, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("%s\n", bodyText)
+func add(i, j int) int {
+	return i + j
 }
 
 type config struct {
