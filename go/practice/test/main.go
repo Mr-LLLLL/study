@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	_ "net/http/pprof"
 	"os"
@@ -39,10 +40,6 @@ type valuemap struct {
 	res string
 }
 
-type In interface {
-	Print()
-}
-
 type str struct{}
 
 func (str) Print() {}
@@ -50,6 +47,10 @@ func (str) Print() {}
 type str1 struct{}
 
 func (str1) Print() {}
+
+type In interface {
+	Print()
+}
 
 func test() {
 	t := "test"
@@ -88,15 +89,24 @@ func recursive(s string, dep int) {
 }
 
 func main() {
-	for i := 0; i < 10; i++ {
-		switch i {
-		case 1, 2, 3, 4:
-			if i == 1 {
-				break
+	c := make(chan *ProgramMem, 10)
+	go func() {
+		for i := 0; i < 10; i++ {
+			c <- &ProgramMem{
+				HeapAlloc: uint64(i),
 			}
-			fmt.Println(i)
 		}
+	}()
+
+	for v := range c {
+		v := v
+		go func() {
+			fmt.Println(v.HeapAlloc)
+		}()
 	}
+
+	time.Sleep(time.Second)
+
 }
 
 func add(i, j int) int {

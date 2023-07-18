@@ -429,6 +429,27 @@ pub fn notify_t_plus<T: Summary + Display>(item: &T) {
     println!("{item}");
 }
 
+struct Pair<T> {
+    x: T,
+    y: T,
+}
+
+impl<T> Pair<T> {
+    fn new(x: T, y: T) -> Self {
+        Self { x, y }
+    }
+}
+
+impl<T: Display + PartialOrd> Pair<T> {
+    fn cmp_display(&self) {
+        if self.x >= self.y {
+            println!("The largest number is x = {}", self.x);
+        } else {
+            println!("The largest number is y = {}", self.y);
+        }
+    }
+}
+
 fn trait_practice() {
     let tweet = Tweet {
         username: String::from("horse_ebooks"),
@@ -461,16 +482,61 @@ where
     println!("{t} {}", u.summarize());
 }
 
-fn main() {
-    trait_practice();
-
-    let i = 32;
-
-    if i == 32 {
-        println!("1")
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
     }
+}
 
-    println!("2")
+struct ImportantExcerpt<'a> {
+    part: &'a str,
+}
+
+impl<'a> ImportantExcerpt<'a> {
+    fn announce_and_return_part(&self, annoucement: &str) -> &str {
+        println!("Attention please: {}", annoucement);
+        self.part
+    }
+}
+
+fn longest_with_an_announcement<'a, T>(x: &'a str, y: &'a str, ann: T) -> &'a str
+where
+    T: Display,
+{
+    println!("Announcement! {}", ann);
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+
+fn livecycle_practice() {
+    let s1 = String::from("ab");
+    let res;
+    {
+        let s2 = "xyz";
+
+        res = longest(s1.as_str(), s2);
+    }
+    println!("The longest string is {res}");
+
+    let novel = String::from("Call me Ishmael. Some years ago...");
+    let first_sentence = novel.split('.').next().expect("Could not find a '.'");
+    let i = ImportantExcerpt {
+        part: first_sentence,
+    };
+
+    let s2 = "xyz";
+
+    let res1 = longest_with_an_announcement(s1.as_str(), s2, "Today is someone's birthday");
+    println!("The longest string is {res1}");
+}
+
+fn main() {
+    livecycle_practice();
 }
 
 fn add_fancy_hat() {}
