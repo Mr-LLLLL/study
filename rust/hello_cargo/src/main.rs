@@ -624,10 +624,99 @@ fn closures_practice() {
 
     borrows_mutably();
     println!("After calling closure: {:?}", mut_list);
+
+    let list2 = vec![1, 2, 3];
+    println!("Before defining closure: {:?}", list);
+
+    thread::spawn(move || println!("From thread: {:?}", list2))
+        .join()
+        .unwrap();
+
+    let mut list = [
+        Rectangle {
+            width: 10,
+            height: 1,
+        },
+        Rectangle {
+            width: 3,
+            height: 1,
+        },
+        Rectangle {
+            width: 5,
+            height: 3,
+        },
+    ];
+
+    let mut num_sort_operations = 0;
+
+    list.sort_by_key(|r| {
+        num_sort_operations += 1;
+        r.width
+    });
+    println!("{:#?}, {num_sort_operations}", list);
+}
+
+fn shoes_in_size(shoes: Vec<Shoe>, shoe_size: u32) -> Vec<Shoe> {
+    shoes.into_iter().filter(|s| s.size == shoe_size).collect()
+}
+
+#[derive(Debug)]
+struct Shoe {
+    size: u32,
+    style: String,
+}
+
+fn iterrator_practice() {
+    let v1 = vec![1, 2, 3, 4];
+
+    let v1_iter = v1.iter();
+
+    for val in v1_iter {
+        println!("Got: {}", val);
+    }
+
+    let mut v2_iter = v1.iter();
+    println!("Got:{}", v2_iter.next().unwrap());
+    println!("Got:{}", v2_iter.next().unwrap());
+
+    let total: i32 = v2_iter.sum();
+    println!("Got: {}", total);
+
+    let v3_iter = v1.iter();
+    let v2: Vec<_> = v3_iter.map(|x| x + 1).collect();
+    println!("Got: {:?}", v2);
+
+    let shoes = vec![
+        Shoe {
+            size: 10,
+            style: String::from("sneaker"),
+        },
+        Shoe {
+            size: 13,
+            style: String::from("sandal"),
+        },
+    ];
+
+    let in_my_size = shoes_in_size(shoes, 10);
+    println!("{:?}", in_my_size);
+}
+
+enum List {
+    Cons(i32, Box<List>),
+    Nil,
+}
+
+use crate::List::{Cons, Nil};
+
+fn smart_pointer_practice() {
+    let b = Box::new(5);
+    println!("b = {b}");
+
+    let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
 }
 
 fn main() {
-    closures_practice();
+    smart_pointer_practice();
 }
 
 fn add_fancy_hat() {}
