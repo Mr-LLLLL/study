@@ -708,11 +708,99 @@ enum List {
 
 use crate::List::{Cons, Nil};
 
+use std::rc::Rc;
+enum List1 {
+    Cons(i32, Rc<List1>),
+    Nil,
+}
+
+use crate::List1::{Cons as Cons1, Nil as Nil1};
+
+use std::cell::RefCell;
+#[derive(Debug)]
+enum List2 {
+    Cons(Rc<RefCell<i32>>, Rc<List2>),
+    Nil,
+}
+
+use crate::List2::{Cons as Cons2, Nil as Nil2};
+
+struct MyBox<T>(T);
+
+impl<T> MyBox<T> {
+    fn new(x: T) -> MyBox<T> {
+        MyBox(x)
+    }
+}
+
+use std::ops::Deref;
+impl<T> Deref for MyBox<T> {
+    type Target = T;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+struct CustomSmartPointer {
+    data: String,
+}
+
+impl Drop for CustomSmartPointer {
+    fn drop(&mut self) {
+        println!("Dropping CustomSmartPointer with data `{}`!", self.data);
+    }
+}
+
 fn smart_pointer_practice() {
     let b = Box::new(5);
     println!("b = {b}");
 
     let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
+
+    let x = 5;
+    let y = MyBox::new(5);
+
+    assert_eq!(5, x);
+    assert_eq!(5, *y);
+
+    fn hello(name: &str) {
+        println!("Hello, {name}!");
+    }
+
+    let m = MyBox::new(String::from("Rust"));
+    hello(&m);
+
+    let c = CustomSmartPointer {
+        data: String::from("my stuff"),
+    };
+    let d = CustomSmartPointer {
+        data: String::from("other stuff"),
+    };
+    println!("CustomSmartPointer created.");
+    drop(c);
+    println!("CustomSmartPointer dropped before the end of main.");
+
+    let a = Rc::new(Cons1(5, Rc::new(Cons1(10, Rc::new(Nil1)))));
+    println!("count after createing a = {}", Rc::strong_count(&a));
+    let b = Cons1(3, Rc::clone(&a));
+    println!("count after creating b = {}", Rc::strong_count(&a));
+    {
+        let c = Cons1(5, Rc::clone(&a));
+        println!("count after creating c = {}", Rc::strong_count(&a));
+    }
+    println!("count after c goes out of scope = {}", Rc::strong_count(&a));
+
+    let value = Rc::new(RefCell::new(5));
+
+    let a = Rc::new(Cons2(Rc::clone(&value), Rc::new(Nil2)));
+    let b = Cons2(Rc::new(RefCell::new(3)), Rc::clone(&a));
+    let c = Cons2(Rc::new(RefCell::new(4)), Rc::clone(&a));
+
+    *value.borrow_mut() += 10;
+    println!("a after = {:?}", a);
+    println!("b after = {:?}", b);
+    println!("c after = {:?}", c);
 }
 
 fn main() {
