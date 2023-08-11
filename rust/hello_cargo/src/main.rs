@@ -708,7 +708,7 @@ enum List {
 
 use crate::List::{Cons, Nil};
 
-use std::rc::Rc;
+use std::rc::{Rc, Weak};
 enum List1 {
     Cons(i32, Rc<List1>),
     Nil,
@@ -724,6 +724,23 @@ enum List2 {
 }
 
 use crate::List2::{Cons as Cons2, Nil as Nil2};
+
+#[derive(Debug)]
+enum List3 {
+    Cons(i32, RefCell<Rc<List3>>),
+    Nil,
+}
+
+use crate::List3::{Cons as Cons3, Nil as Nil3};
+
+impl List3 {
+    fn tail(&self) -> Option<&RefCell<Rc<List3>>> {
+        match self {
+            Cons3(_, item) => Some(item),
+            Nil3 => None,
+        }
+    }
+}
 
 struct MyBox<T>(T);
 
@@ -748,8 +765,15 @@ struct CustomSmartPointer {
 
 impl Drop for CustomSmartPointer {
     fn drop(&mut self) {
-        println!("Dropping CustomSmartPointer with data `{}`!", self.data);
+        println!("\nDropping CustomSmartPointer with data `{}`!", self.data);
     }
+}
+
+#[derive(Debug)]
+struct Node {
+    value: i32,
+    children: RefCell<Vec<Rc<Node>>>,
+    parent: RefCell<Weak<Node>>,
 }
 
 fn smart_pointer_practice() {
@@ -801,10 +825,135 @@ fn smart_pointer_practice() {
     println!("a after = {:?}", a);
     println!("b after = {:?}", b);
     println!("c after = {:?}", c);
+
+    println!("");
+
+    let a = Rc::new(Cons3(5, RefCell::new(Rc::new(Nil3))));
+
+    println!("a initial rc count = {}", Rc::strong_count(&a));
+    println!("a next item = {:?}", a.tail());
+
+    let b = Rc::new(Cons3(10, RefCell::new(Rc::clone(&a))));
+
+    println!("a rc count after b creation = {}", Rc::strong_count(&a));
+    println!("b initial rc count = {}", Rc::strong_count(&b));
+    println!("b next item = {:?}", b.tail());
+
+    if let Some(link) = a.tail() {
+        *link.borrow_mut() = Rc::clone(&b);
+    }
+
+    println!("b rc count after changing a = {}", Rc::strong_count(&b));
+    println!("a rc count after changing a = {}", Rc::strong_count(&a));
+
+    println!("");
+    let leaf = Rc::new(Node {
+        value: 3,
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![]),
+    });
+
+    println!(
+        "leaf strong = {}, weak = {}",
+        Rc::strong_count(&leaf),
+        Rc::weak_count(&leaf)
+    );
+
+    {
+        let branch = Rc::new(Node {
+            value: 5,
+            parent: RefCell::new(Weak::new()),
+            children: RefCell::new(vec![Rc::clone(&leaf)]),
+        });
+
+        *leaf.parent.borrow_mut() = Rc::downgrade(&branch);
+
+        println!(
+            "branch strong = {}, weak = {}",
+            Rc::strong_count(&branch),
+            Rc::weak_count(&branch)
+        );
+        println!(
+            "leaf strong = {}, weak = {}",
+            Rc::strong_count(&leaf),
+            Rc::weak_count(&leaf)
+        )
+    }
+
+    println!("leaf parent = {:?}", leaf.parent.borrow().upgrade());
+    println!(
+        "leaf strong = {}, weak = {}",
+        Rc::strong_count(&leaf),
+        Rc::weak_count(&leaf)
+    );
+}
+
+use std::sync::mpsc;
+use std::sync::{Arc, Mutex, MutexGuard};
+fn parallel_practice() {
+    let v = vec![1, 2, 3];
+
+    let handle = thread::spawn(move || {
+        println!("hi number {:?} from the spawned thread!", v);
+    });
+
+    for i in 1..5 {
+        println!("hi number {} from the main thread!", i);
+        thread::sleep(Duration::from_millis(1));
+    }
+
+    handle.join().unwrap();
+
+    let (tx, rx) = mpsc::channel();
+
+    let tx1 = tx.clone();
+    thread::spawn(move || {
+        let vals = vec![
+            String::from("hi"),
+            String::from("from"),
+            String::from("the"),
+            String::from("thread"),
+        ];
+        for val in vals {
+            tx.send(val).unwrap();
+        }
+    });
+    thread::spawn(move || {
+        let vals = vec![
+            String::from("more"),
+            String::from("messages"),
+            String::from("for"),
+            String::from("you"),
+        ];
+        for val in vals {
+            tx1.send(val).unwrap();
+        }
+    });
+    for received in rx {
+        println!("Got: {}", received);
+    }
+
+    let counter = Arc::new(Mutex::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = Arc::clone(&counter);
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+    println!("Result: {}", *counter.lock().unwrap());
 }
 
 fn main() {
-    smart_pointer_practice();
+    parallel_practice();
 }
 
 fn add_fancy_hat() {}
