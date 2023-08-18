@@ -1,14 +1,16 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"time"
+	"io"
+	"log"
+	"reflect"
+	"sync"
 
 	_ "net/http/pprof"
 	"os"
 	"runtime"
-
-	"golang.org/x/net/context"
 )
 
 const (
@@ -88,25 +90,67 @@ func recursive(s string, dep int) {
 	recursive(s, dep+1)
 }
 
-func main() {
-	c := make(chan *ProgramMem, 10)
-	go func() {
-		for i := 0; i < 10; i++ {
-			c <- &ProgramMem{
-				HeapAlloc: uint64(i),
-			}
-		}
-	}()
+type S struct {
+	Key []struct {
+		Key string
+	}
+}
 
-	for v := range c {
-		v := v
+func main() {
+	wg := sync.WaitGroup{}
+	for i := 0; i < 100; i++ {
+		wg.Add(1)
 		go func() {
-			fmt.Println(v.HeapAlloc)
+			defer wg.Done()
+
+			content, err := os.ReadFile("./newcode.go")
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Println(string(content))
 		}()
 	}
+	wg.Wait()
+}
 
-	time.Sleep(time.Second)
+func SetValueByTag(s any, tag string) error {
+	ref := reflect.ValueOf(s)
+	if ref.Kind() != reflect.Pointer {
+		return fmt.Errorf("s must a pointer")
+	}
+	ref = ref.Elem()
 
+	err := assignTo(ref, tag)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+func assignTo(ref reflect.Value, tag string) error {
+	for i := 0; i < ref.NumField(); i++ {
+		v := ref.Field(i)
+
+		if v.Kind() == reflect.Pointer {
+			v.Set(reflect.New(v.Type().Elem()))
+		}
+
+		if v.Kind() == reflect.Struct {
+			err := assignTo(v, tag)
+			if err != nil {
+				return err
+			}
+			continue
+		}
+
+		tagValue := ref.Type().Field(i).Tag.Get(tag)
+		if tagValue == "" {
+			continue
+		}
+
+	}
+
+	return nil
 }
 
 func add(i, j int) int {

@@ -23,6 +23,7 @@ require (
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.9.1 // indirect
 	github.com/prometheus/procfs v0.0.11 // indirect
+	github.com/silenceper/pool v1.0.0
 	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/stretchr/testify v1.7.1 // indirect
 	golang.org/x/sys v0.4.0 // indirect
