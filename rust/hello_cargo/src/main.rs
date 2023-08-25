@@ -5,6 +5,7 @@ use std::fmt::{Display, Result};
 use std::fs::{self, File};
 use std::io::{self, Read, Write};
 use std::io::{ErrorKind, Result as IoResult};
+use std::slice;
 use std::time::Duration;
 use std::{collections::*, panic, result, thread, vec};
 
@@ -377,6 +378,15 @@ enum CusOption<T> {
     None,
 }
 
+impl<T> CusOption<T> {
+    pub fn unwrap(self) -> T {
+        match self {
+            CusOption::Some(val) => val,
+            CusOption::None => panic!("called `Option::unwrap()` on a `None` value"),
+        }
+    }
+}
+
 pub trait Summary {
     fn summarize(&self) -> String {
         format!("(Read more from {}...)", self.summarize_author())
@@ -451,6 +461,117 @@ impl<T: Display + PartialOrd> Pair<T> {
     }
 }
 
+struct Counter {
+    count: u32,
+}
+
+impl Counter {
+    fn new() -> Counter {
+        Counter { count: 0 }
+    }
+}
+
+impl Iterator for Counter {
+    type Item = u32;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.count < 5 {
+            self.count += 1;
+            Some(self.count)
+        } else {
+            None
+        }
+    }
+}
+
+trait Pilot {
+    fn fly(&self);
+}
+
+trait Wizard {
+    fn fly(&self);
+}
+
+struct Human;
+
+impl Pilot for Human {
+    fn fly(&self) {
+        println!("This is your captain speaking.");
+    }
+}
+
+impl Wizard for Human {
+    fn fly(&self) {
+        println!("Up!");
+    }
+}
+
+impl Human {
+    fn fly(&self) {
+        println!("*waving args furiously*");
+    }
+}
+
+trait Animal {
+    fn baby_name() -> String;
+}
+
+struct Dog;
+
+impl Dog {
+    fn baby_name() -> String {
+        String::from("Spot")
+    }
+}
+
+impl Animal for Dog {
+    fn baby_name() -> String {
+        String::from("puppy")
+    }
+}
+
+use std::fmt;
+trait OutlinePrint: fmt::Display {
+    fn outline_print(&self) {
+        let output = self.to_string();
+        let len = output.len();
+        println!("{}", "*".repeat(len + 4));
+        println!("*{}*", " ".repeat(len + 2));
+        println!("* {} *", output);
+        println!("*{}*", " ".repeat(len + 2));
+        println!("{}", "*".repeat(len + 4));
+    }
+}
+
+struct Point_int {
+    x: i32,
+    y: i32,
+}
+
+impl OutlinePrint for Point_int {}
+
+impl fmt::Display for Point_int {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "({}, {})", self.x, self.y)
+    }
+}
+
+struct Wrapper(Vec<String>);
+
+impl fmt::Display for Wrapper {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "[{}]", self.0.join(", "))
+    }
+}
+
+fn bar() -> ! {
+    panic!();
+}
+
+fn returns_closure() -> Box<dyn Fn(i32) -> i32> {
+    Box::new(|x| x + 1)
+}
+
 fn trait_practice() {
     let tweet = Tweet {
         username: String::from("horse_ebooks"),
@@ -469,6 +590,31 @@ fn trait_practice() {
     notify(&article);
 
     notify_t(&tweet, &tweet);
+
+    println!("");
+
+    let person = Human;
+    person.fly();
+    Human::fly(&person);
+    Pilot::fly(&person);
+    Wizard::fly(&person);
+    <Human as Pilot>::fly(&person);
+
+    println!("");
+    println!("A baby dog is called a {}", <Dog as Animal>::baby_name());
+
+    println!("");
+    let p = Point_int { x: 1, y: 1 };
+    p.outline_print();
+
+    println!("");
+    let w = Wrapper(vec![String::from("hello"), String::from("world")]);
+    println!("w = {}", w);
+
+    type Kilometers = i32;
+    let x: i32 = 5;
+    let y: Kilometers = 5;
+    println!("x + y = {}", x + y);
 }
 
 fn some_function<T: Display + Clone, U: Clone + Summary>(t: &T, u: &U) {
@@ -952,8 +1098,112 @@ fn parallel_practice() {
     println!("Result: {}", *counter.lock().unwrap());
 }
 
+pub struct AveragedCollection {
+    list: Vec<i32>,
+    average: f64,
+}
+
+impl AveragedCollection {
+    pub fn add(&mut self, value: i32) {
+        self.list.push(value);
+        self.update_average();
+    }
+
+    pub fn remove(&mut self) -> Option<i32> {
+        let result = self.list.pop();
+        match result {
+            Some(value) => {
+                self.update_average();
+                Some(value)
+            }
+            None => None,
+        }
+    }
+
+    pub fn average(&self) -> f64 {
+        self.average
+    }
+
+    fn update_average(&mut self) {
+        let total: i32 = self.list.iter().sum();
+        self.average = total as f64 / self.list.len() as f64;
+    }
+}
+
+fn split_at_mut(values: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
+    let len = values.len();
+    let ptr = values.as_mut_ptr();
+
+    assert!(mid <= len);
+
+    unsafe {
+        (
+            slice::from_raw_parts_mut(ptr, mid),
+            slice::from_raw_parts_mut(ptr.add(mid), len - mid),
+        )
+    }
+}
+
+extern "C" {
+    fn abs(input: i32) -> i32;
+}
+
+static HELLO_WORLD: &str = "Hello, world!";
+
+static mut COUTNER: u32 = 0;
+
+fn add_to_count(inc: u32) {
+    unsafe {
+        COUTNER += inc;
+    }
+}
+
+fn parallel_unsafe() {
+    let mut vector = vec![1, 2, 3, 4, 5, 6];
+    let (left, right) = split_at_mut(&mut vector, 3);
+
+    unsafe {
+        println!("Absolute value of -3 according to C: {}", abs(-3));
+    }
+
+    println!("name is {}", HELLO_WORLD);
+
+    add_to_count(3);
+    unsafe {
+        println!("COUNTER: {}", COUTNER);
+    }
+}
+
+#[macro_export]
+macro_rules! vec_cus {
+    ($ ($x:expr), *) => {
+        {
+        let mut temp_vec = Vec::new();
+        $(
+            temp_vec.push($x);
+        )*
+        temp_vec
+        }
+    };
+}
+
+pub trait HelloMacro {
+    fn hello_macro();
+}
+use hello_macro_derive::HelloMacro;
+
+#[derive(HelloMacro)]
+struct Pancakes;
+
+fn practice_macro() {
+    let v = vec_cus![1, 2, 3];
+    println!("{:?}", v);
+
+    Pancakes::hello_macro();
+}
+
 fn main() {
-    parallel_practice();
+    practice_macro()
 }
 
 fn add_fancy_hat() {}
