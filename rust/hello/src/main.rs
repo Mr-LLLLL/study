@@ -1,6 +1,5 @@
 use hello::ThreadPool;
 use std::{
-    fmt::format,
     fs,
     io::{prelude::*, BufReader},
     net::{TcpListener, TcpStream},
