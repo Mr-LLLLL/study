@@ -1,7 +1,11 @@
+mod distribute_monry_to_maximum_children;
 mod find_the_maximum_achivable_number;
 mod long_common_prefix;
 mod merge_sorted_array;
 mod palindrome_number;
+mod remove_dup_from_sorted_arry;
+mod remove_element;
 mod roman_to_integer;
 mod summary_ranges;
 mod two_number;
+mod valid_parenthese;
