@@ -1,4 +1,5 @@
 mod distribute_monry_to_maximum_children;
+mod find_the_index_of_the_first_occurrence_in_a_string;
 mod find_the_maximum_achivable_number;
 mod long_common_prefix;
 mod merge_sorted_array;
