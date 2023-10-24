@@ -2,7 +2,7 @@
 
 # read-validate: validate input
 
-invalid_input () {
+invalid_input() {
 	echo "Invalid input '$REPLY'" >&2
 	exit 1
 }
@@ -13,7 +13,7 @@ read -p "Enter a single item > "
 [ -z $REPLY ] && invalid_input
 
 # input is mutiple items (invalid)
-(( $(echo $REPLY | wc -w) > 1 )) && invalid_input
+(($(echo $REPLY | wc -w) > 1)) && invalid_input
 
 # is input a valid filename?
 if [[ $REPLY =~ ^[-[:alnum:]\._]+$ ]]; then

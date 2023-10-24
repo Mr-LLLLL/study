@@ -1,16 +1,21 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"fmt"
-	"io"
-	"log"
+	"os/exec"
 	"reflect"
+	"strings"
 	"sync"
 
 	_ "net/http/pprof"
 	"os"
 	"runtime"
+
+	"mytest/pool"
+
+	"gitlab.cd.anpro/go/common/file"
 )
 
 const (
@@ -96,23 +101,121 @@ type S struct {
 	}
 }
 
-func main() {
-	wg := sync.WaitGroup{}
-	for i := 0; i < 100; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-
-			content, err := os.ReadFile("./newcode.go")
-			if err != nil {
-				log.Fatal(err)
-			}
-			fmt.Println(string(content))
-		}()
+func initFun() func() int {
+	s := 5
+	return func() int {
+		return s
 	}
-	wg.Wait()
 }
 
+var getS = initFun()
+
+type cmdLimiter chan struct{}
+
+var (
+	aCmdLimiter cmdLimiter
+	aCmdOnce    sync.Once
+)
+
+func getCmdLimiter() cmdLimiter {
+	aCmdOnce.Do(func() {
+		aCmdLimiter = make(chan struct{}, 1)
+	})
+
+	return aCmdLimiter
+}
+
+func (c cmdLimiter) limit() {
+	c <- struct{}{}
+}
+
+func (c cmdLimiter) free() {
+	<-c
+}
+
+type person struct {
+	name string
+}
+
+func gitErrHandle(msg []byte, err error) error {
+	if err == nil {
+		return nil
+	}
+
+	m := err.Error()
+	switch {
+	case strings.Contains(m, "Warning") || strings.Contains(m, "warning"):
+		return nil
+	case bytes.Contains(msg, []byte("Access denied. The provided password or token is incorrect or your account has 2FA enabled and you must use a personal access token instead of a password")):
+		return fmt.Errorf("")
+	}
+
+	return fmt.Errorf("%s", msg)
+}
+
+func main() {
+	fmt.Println("ksjdfks")
+	pool.Test()
+}
+
+func test111(path string) ([]byte, error) {
+	os.MkdirAll(path, 0777)
+
+	cmd := exec.CommandContext(context.Background(), "git", "clone", "-q", "-b", "dev", "--single-branch", "-j", "10", "--recursive", "--no-tags", "https://111:1111@gitee.com/acgist/taoyao.git", "./")
+	cmd.Dir = path
+
+	outbuf := bytes.Buffer{}
+	errbuf := bytes.Buffer{}
+	cmd.Stdout = &outbuf
+	cmd.Stderr = &outbuf
+
+	err := cmd.Run()
+	if err != nil {
+		// if err, return stdout and stderr
+		return append(outbuf.Bytes(), errbuf.Bytes()...), err
+	}
+
+	if errbuf.Len() != 0 {
+		return outbuf.Bytes(), fmt.Errorf("%s", errbuf.String())
+	}
+
+	return outbuf.Bytes(), nil
+}
+
+func unzipAllZipInDir(ctx context.Context, path string, unzipOpt *file.UnzipOpt) error {
+	if unzipOpt == nil {
+		return nil
+	}
+
+	files, err := file.GetAllFileInDir(path, file.GetVcsFeatureDirName()...)
+	if err != nil {
+		return err
+	}
+
+	zipFiles := make([]string, 0)
+	for _, v := range files {
+		if file.IsZipOrArchiveFile(v) {
+			zipFiles = append(zipFiles, v)
+
+			_, err := os.Open(v)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+func Recover(ctx ...context.Context) {
+	if err := recover(); err != nil {
+		if len(ctx) > 0 && ctx[0] != nil {
+			fmt.Println("hello")
+		} else {
+			fmt.Println("word")
+		}
+	}
+}
 func SetValueByTag(s any, tag string) error {
 	ref := reflect.ValueOf(s)
 	if ref.Kind() != reflect.Pointer {
