@@ -1,4 +1,5 @@
 mod add_binary_67;
+mod climbing_stairs_70;
 mod distribute_money_to_maximum_children;
 mod find_the_index_of_the_first_occurrence_in_a_string_28;
 mod find_the_maximum_achivable_number;
@@ -9,6 +10,7 @@ mod merge_two_sorted_lists_21;
 mod palindrome_number_9;
 mod plus_one_66;
 mod remove_dup_from_sorted_arry_26;
+mod remove_duplicates_from_sorted_list_83;
 mod remove_element_27;
 mod roman_to_integer_13;
 mod search_insert_position_35;
