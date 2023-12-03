@@ -14,6 +14,7 @@ mod remove_dup_from_sorted_arry_26;
 mod remove_duplicates_from_sorted_list_83;
 mod remove_element_27;
 mod roman_to_integer_13;
+mod same_tree_100;
 mod search_insert_position_35;
 mod sqrtx_69;
 mod summary_ranges;

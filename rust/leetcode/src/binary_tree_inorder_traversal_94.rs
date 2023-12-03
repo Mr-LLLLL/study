@@ -30,13 +30,13 @@ fn inorder_traversal(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
 
     while node.is_some() || stack.len() > 0 {
         while let Some(n) = node {
-            node = n.to_owned().borrow().left.take();
+            node = n.borrow().left.clone();
             stack.push(n);
         }
 
         if let Some(n) = stack.pop() {
             ans.push(n.borrow().val);
-            node = n.borrow().right.take();
+            node = n.borrow().right.clone();
         }
     }
 
