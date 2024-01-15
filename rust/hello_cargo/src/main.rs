@@ -519,7 +519,7 @@ trait Animal {
 struct Dog;
 
 impl Dog {
-    fn baby_name() -> String {
+    pub fn baby_name() -> String {
         String::from("Spot")
     }
 }

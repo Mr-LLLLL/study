@@ -1,6 +1,7 @@
 mod add_binary_67;
 mod binary_tree_inorder_traversal_94;
 mod climbing_stairs_70;
+mod common;
 mod distribute_money_to_maximum_children;
 mod find_the_index_of_the_first_occurrence_in_a_string_28;
 mod find_the_maximum_achivable_number;
@@ -18,5 +19,6 @@ mod same_tree_100;
 mod search_insert_position_35;
 mod sqrtx_69;
 mod summary_ranges;
+mod symmetric_tree_101;
 mod two_number_1;
 mod valid_parenthese_20;
