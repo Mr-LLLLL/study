@@ -522,6 +522,142 @@ fn practice_function() {
 
     // 在闭包的签名中删除 `move` 会导致闭包以不可变方式借用 `haystack`，因此之后
     // `haystack` 仍然可用，取消上面的注释也不会导致错误。
+
+    let greeting = "hello";
+    let mut farewell = "goodbye".to_owned();
+
+    let diary = || {
+        println!("I said {}", greeting);
+
+        farewell.push_str("!!!");
+        println!("Then I Screamed {}", farewell);
+        println!("Now I can sleep. zzzzzz");
+
+        std::mem::drop(farewell);
+    };
+
+    apply(diary);
+
+    let mut x = 0 as i32;
+
+    let double = |y| {
+        x += 2;
+        y
+    };
+    println!("3 doubled: {}", apply_to_3(double));
+    println!("3 doubled: {}", x);
+
+    let fn_plain = create_fn();
+    let mut fn_mut = create_fnmut();
+    let fn_once = create_fnonce();
+
+    fn_plain();
+    fn_mut();
+    fn_once();
+
+    let vec1 = vec![1, 2, 3];
+    let vec2 = vec![4, 5, 6];
+
+    // 对 vec 的 `iter()` 举出 `&i32`。（通过用 `&x` 匹配）把它解构成 `i32`。
+    // 译注：注意 `any` 方法会自动地把 `vec.iter()` 举出的迭代器的元素一个个地
+    // 传给闭包。因此闭包接收到的参数是 `&i32` 类型的。
+    println!("2 in vec1: {}", vec1.iter().any(|&x| x == 2));
+    // 对 vec 的 `into_iter()` 举出 `i32` 类型。无需解构。
+    println!("2 in vec2: {}", vec2.into_iter().any(|x| x == 2));
+
+    let array1 = [1, 2, 3];
+    let array2 = [4, 5, 6];
+
+    // 对数组的 `iter()` 举出 `&i32`。
+    println!("2 in array1: {}", array1.iter().any(|&x| x == 2));
+    // 对数组的 `into_iter()` 举出 `i32`。
+    println!("2 in array2: {}", array2.into_iter().any(|x| x == 2));
+
+    let vec1 = vec![1, 2, 3];
+    let vec2 = vec![4, 5, 6];
+
+    // 对 vec1 的 `iter()` 举出 `&i32` 类型。
+    let mut iter = vec1.iter();
+    // 对 vec2 的 `into_iter()` 举出 `i32` 类型。
+    let mut into_iter = vec2.into_iter();
+
+    // 对迭代器举出的元素的引用是 `&&i32` 类型。解构成 `i32` 类型。
+    // 译注：注意 `find` 方法会把迭代器元素的引用传给闭包。迭代器元素自身
+    // 是 `&i32` 类型，所以传给闭包的是 `&&i32` 类型。
+    println!("Find 2 in vec1: {:?}", iter.find(|&&x| x == 2));
+    // 对迭代器举出的元素的引用是 `&i32` 类型。解构成 `i32` 类型。
+    println!("Find 2 in vec2: {:?}", into_iter.find(|&x| x == 2));
+
+    let array1 = [1, 2, 3];
+    let array2 = [4, 5, 6];
+
+    // 对数组的 `iter()` 举出 `&i32`。
+    println!("Find 2 in array1: {:?}", array1.iter().find(|&&x| x == 2));
+    // 对数组的 `into_iter()` 通常举出 `&i32``。
+    println!(
+        "Find 2 in array2: {:?}",
+        array2.into_iter().find(|&x| x == 2)
+    );
+
+    println!("Find the sum of all the squared odd numbers under 1000");
+    let upper = 1000;
+    let mut acc = 0;
+
+    let is_odd = |n| n % 2 == 1;
+
+    for n in 0.. {
+        let n_squared = n * n;
+        if n_squared >= upper {
+            break;
+        } else if is_odd(n_squared) {
+            acc += n_squared;
+        }
+    }
+    println!("imperative style: {}", acc);
+
+    let sum_of_squared_odd_numbers: u32 = (0..)
+        .map(|n| n * n)
+        .take_while(|&n| n < upper)
+        .filter(|&n| is_odd(n))
+        .fold(0, |sum, i| sum + i);
+    println!("functional style: {}", sum_of_squared_odd_numbers);
+}
+
+#[allow(dead_code)]
+fn foo() -> ! {
+    panic!("This call never returns.");
+}
+
+fn apply<F>(f: F)
+where
+    F: FnOnce(),
+{
+    f();
+}
+
+fn apply_to_3<F>(mut f: F) -> i32
+where
+    F: FnMut(i32) -> i32,
+{
+    f(3)
+}
+
+fn create_fn() -> impl Fn() {
+    let text = "Fn".to_string();
+
+    move || println!("This is a: {}", text)
+}
+
+fn create_fnmut() -> impl FnMut() {
+    let text = "FnMut".to_string();
+
+    move || println!("This is a: {}", text)
+}
+
+fn create_fnonce() -> impl FnOnce() {
+    let text = "FnOnce".to_string();
+
+    move || println!("This is a: {}", text)
 }
 
 fn main() {
