@@ -2,7 +2,12 @@ package main
 
 import (
 	"container/list"
+	"crypto/md5"
+	"encoding/hex"
+	"fmt"
+	"io"
 	_ "net/http/pprof"
+	"os"
 )
 
 type Node1 struct {
@@ -75,5 +80,8 @@ func (Node) vec_to_() {
 }
 
 func main() {
-	// file.Unzip()
+	f, _ := os.Open("/tmp/test/tomcat-util.jar")
+	m := md5.New()
+	io.Copy(m, f)
+	fmt.Println(hex.EncodeToString(m.Sum(nil)))
 }
