@@ -660,6 +660,110 @@ fn create_fnonce() -> impl FnOnce() {
     move || println!("This is a: {}", text)
 }
 
+mod my_mod {
+    fn private_function() {
+        println!("called `my_mod::private_function()`");
+    }
+
+    pub fn function() {
+        println!("called `my_mod::function()`");
+    }
+
+    pub fn indirect_access() {
+        println!("called `my_mod::indirect_access()`, that\n> ");
+        private_function();
+    }
+
+    pub mod nested {
+        pub fn function() {
+            println!("called `my_mod::nested::function()`");
+        }
+
+        #[allow(dead_code)]
+        fn private_function() {
+            println!("called `my_mod::nested::private_function()`");
+        }
+
+        pub(in crate::my_mod) fn public_function_in_my_mod() {
+            println!("called `my_mod::nested::public_function_in_my_mod()`, that\n > ");
+            public_function_in_nested();
+        }
+
+        // equal fn public_function_in_nested
+        pub(self) fn public_function_in_nested() {
+            println!("called `my_mod::nested::public_function_in_nested`");
+        }
+
+        pub(super) fn public_function_in_super_mod() {
+            println!("called `my_mod::nested::public_function_in_super()`");
+        }
+    }
+
+    pub fn call_public_function_in_my_mod() {
+        println!("called `my_mod::call_public_function_in_my_mod()` that\n> ");
+        nested::public_function_in_my_mod();
+        println!("> ");
+        nested::public_function_in_super_mod();
+    }
+
+    pub(crate) fn public_function_in_crate() {
+        println!("called `my_mod::public_function_in_crate()`");
+    }
+
+    mod private_nested {
+        #[allow(dead_code)]
+        pub fn function() {
+            println!("called `my_mod::private_nested::function()`");
+        }
+    }
+}
+
+fn function() {
+    println!("called `function()`");
+}
+
+mod my {
+    pub struct OpenBox<T> {
+        pub content: T,
+    }
+
+    #[allow(dead_code)]
+    pub struct CloseBox<T> {
+        content: T,
+    }
+}
+
+#[allow(dead_code)]
+fn practice_mod() {
+    function();
+    my_mod::function();
+    my_mod::indirect_access();
+
+    my_mod::nested::function();
+    my_mod::call_public_function_in_my_mod();
+
+    my_mod::public_function_in_crate();
+
+    // pub(in path) 项只能在指定的模块中访问
+    // 报错！函数 `public_function_in_my_mod` 是私有的
+    //my_mod::nested::public_function_in_my_mod();
+    // 试一试 ^ 取消该行的注释
+
+    // 模块的私有项不能直接访问，即便它是嵌套在公有模块内部的
+
+    // 报错！`private_function` 是私有的
+    //my_mod::private_function();
+    // 试一试 ^ 取消此行注释
+
+    // 报错！`private_function` 是私有的
+    //my_mod::nested::private_function();
+    // 试一试 ^ 取消此行的注释
+
+    // Error! `private_nested` is a private module
+    //my_mod::private_nested::function();
+    // 试一试 ^ 取消此行的注释
+}
+
 fn main() {
-    practice_function();
+    practice_mod()
 }

@@ -1,7 +1,7 @@
-from _typeshed import ProfileFunction
-import torch
+# from _typeshed import ProfileFunction
+# import torch
 
-print(torch.__version__)
+# print(torch.__version__)
 
 a = ["hello", 1]
 a[0] = "world"
