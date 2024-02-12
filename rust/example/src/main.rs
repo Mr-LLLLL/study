@@ -1071,6 +1071,114 @@ fn new_edition(book: &mut Book) {
     println!("I mutably borrowed {} - {} edition", book.title, book.year);
 }
 
+fn failed_borrow<'a>() {
+    let _x = 12;
+}
+
+fn print_refs<'a, 'b>(x: &'a i32, y: &'b i32) {
+    println!("x is {} and y is {}", x, y);
+}
+
+fn print_one<'a>(x: &'a i32) {
+    println!("`print_one`: x is {}", x);
+}
+
+fn add_one<'a>(x: &'a mut i32) {
+    *x += 1;
+}
+
+fn print_multi<'a, 'b>(x: &'a i32, y: &'b i32) {
+    println!("`print_multi`: x is {}, y is {}", x, y);
+}
+
+fn pass_x<'a, 'b>(x: &'a i32, _: &'b i32) -> &'a i32 {
+    x
+}
+
+struct Owner(i32);
+
+impl Owner {
+    fn add_one<'a>(&'a mut self) {
+        self.0 += 1;
+    }
+    fn print<'a>(&'a self) {
+        println!("`print`: {}", self.0);
+    }
+}
+
+#[derive(Debug)]
+struct Borrowed<'a>(&'a i32);
+
+#[derive(Debug)]
+struct Borrowed1<'a> {
+    x: &'a i32,
+}
+
+impl<'a> Default for Borrowed1<'a> {
+    fn default() -> Self {
+        Self { x: &10 }
+    }
+}
+
+#[derive(Debug)]
+struct NamedBorrowed<'a> {
+    x: &'a i32,
+    y: &'a i32,
+}
+
+#[derive(Debug)]
+enum Either<'a> {
+    Num(i32),
+    Ref(&'a i32),
+}
+
+#[derive(Debug)]
+struct Ref<'a, T: 'a>(&'a T);
+
+fn print<T>(t: T)
+where
+    T: Debug,
+{
+    println!("`print`: t is {:?}", t);
+}
+
+fn print_ref<'a, T>(t: &'a T)
+where
+    T: Debug + 'a,
+{
+    println!("`print_ref`: t is {:?}", t);
+}
+
+fn multiply<'a>(first: &'a i32, second: &'a i32) -> i32 {
+    first + second
+}
+
+fn choose_first<'a: 'b, 'b>(first: &'a i32, _: &'b i32) -> &'b i32 {
+    first
+}
+
+static NUM: i32 = 18;
+
+fn coerce_static<'a>(_: &'a i32) -> &'a i32 {
+    &NUM
+}
+
+fn elided_input(x: &i32) {
+    println!("`elided_input`: {}", x);
+}
+
+fn annoted_input<'a>(x: &'a i32) {
+    println!("`annoted_input`: {}", x)
+}
+
+fn elided_pass(x: &i32) -> &i32 {
+    x
+}
+
+fn annoted_pass<'a>(x: &'a i32) -> &'a i32 {
+    x
+}
+
 fn practise_lifetime() {
     let _box2 = Box::new(5i32);
 
@@ -1218,13 +1326,85 @@ fn practise_lifetime() {
         mutable_point.x, mutable_point.y
     );
 
-    let mut mutable_tuple = (Box::new(5u32), 3u32);
+    let mut mutable_tuple = (Box::new(5_u32), 3_u32);
     {
         let (_, ref mut last) = mutable_tuple;
         *last = 2u32;
     }
 
     println!("tuple is {:?}", mutable_tuple);
+
+    let (four, nine) = (4, 9);
+
+    print_refs(&four, &nine);
+
+    failed_borrow();
+
+    let x = 7;
+    let y = 9;
+
+    print_one(&x);
+    print_multi(&x, &y);
+
+    let z = pass_x(&x, &y);
+    print_one(z);
+
+    let mut t = 3;
+    add_one(&mut t);
+    print_one(&t);
+
+    let mut owner = Owner(18);
+
+    owner.add_one();
+    owner.print();
+
+    let x = 18;
+    let y = 19;
+    let single = Borrowed(&x);
+    let double = NamedBorrowed { x: &x, y: &y };
+    let reference = Either::Ref(&x);
+    let number = Either::Num(y);
+
+    println!("x is borrowed in {:?}", single);
+    println!("x and y are borrowed in {:?}", double);
+    println!("x is borrowed in {:?}", reference);
+    println!("y is *not* borrowed in {:?}", number);
+
+    let b: Borrowed1 = Default::default();
+    println!("b is {:?}", b);
+
+    let x = 7;
+    let ref_x = Ref(&x);
+
+    print_ref(&ref_x);
+    print(ref_x);
+
+    let first = 2;
+    {
+        let seconds = 3;
+        println!("The product is {}", multiply(&first, &seconds));
+        println!("{} is the first", choose_first(&first, &seconds));
+    }
+
+    {
+        let static_string = "I'am in read-only memory";
+        println!("sttic_string: {}", static_string);
+    }
+
+    {
+        let lifetime_num = 9;
+        let coerced_static = coerce_static(&lifetime_num);
+
+        println!("coerced_static: {}", coerced_static);
+    }
+
+    println!("NUM: {} stays accessible!", NUM);
+
+    let x = 3;
+    elided_input(&x);
+    annoted_input(&x);
+    println!("`elided_pass`: {}", elided_pass(&x));
+    println!("`annoted_input`: {}", annoted_pass(&x));
 }
 
 fn main() {
