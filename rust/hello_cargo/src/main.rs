@@ -1,13 +1,16 @@
+#![allow(dead_code)]
+
 mod back_of_house;
 mod front_of_house;
 
-use std::fmt::{Display, Result};
+use std::fmt::Display;
 use std::fs::{self, File};
-use std::io::{self, Read, Write};
-use std::io::{ErrorKind, Result as IoResult};
+use std::io;
+use std::io::ErrorKind;
+
 use std::slice;
+use std::thread;
 use std::time::Duration;
-use std::{collections::*, panic, result, thread, vec};
 
 fn deliver_order() {}
 
@@ -216,6 +219,22 @@ fn base_practice() {
 
     string_practice();
     hashmap_practice();
+}
+
+fn hex_or_die_trying(maybe_string: Option<String>) -> core::result::Result<u32, String> {
+    let Some(s) = maybe_string else {
+        return Err(String::from("got none"));
+    };
+
+    let Some(first_byte_char) = s.chars().next() else {
+        return Err(String::from("got empty string"));
+    };
+
+    let Some(digit) = first_byte_char.to_digit(16) else {
+        return Err(String::from("not a hex digit"));
+    };
+
+    Ok(digit)
 }
 
 fn hashmap_practice() {
