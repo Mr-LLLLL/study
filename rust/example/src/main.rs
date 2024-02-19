@@ -933,7 +933,7 @@ struct Length<Unit>(f64, PhantomData<Unit>);
 impl<Unit> Add for Length<Unit> {
     type Output = Length<Unit>;
 
-    fn add(self, rhs: Length<Unit>) -> Length<Unit> {
+    fn add(self, rhs: Length<Unit>) -> Self::Output {
         Length(self.0 + rhs.0, PhantomData)
     }
 }
@@ -1504,6 +1504,35 @@ fn random_animal(random_number: f64) -> Box<dyn Animal1> {
     }
 }
 
+struct Foo;
+struct Bar;
+
+#[derive(Debug)]
+struct FooBar;
+
+#[derive(Debug)]
+struct BarFoo;
+
+impl Add<Bar> for Foo {
+    type Output = FooBar;
+
+    fn add(self, _rhs: Bar) -> Self::Output {
+        println!("> Foo.add(Bar) was called");
+
+        FooBar
+    }
+}
+
+impl Add<Foo> for Bar {
+    type Output = BarFoo;
+
+    fn add(self, _rhs: Foo) -> Self::Output {
+        println!("> Bar.add(Foo) was called");
+
+        BarFoo
+    }
+}
+
 fn practise_trait() {
     let mut dolly: Sheep = Animal::new("Dolly");
 
@@ -1532,6 +1561,9 @@ fn practise_trait() {
         "You've randomly chosen an animal, and it says {}",
         animal.noise()
     );
+
+    println!("Foo + Bar = {:?}", Foo + Bar);
+    println!("Bar + Foo = {:?}", Bar + Foo);
 }
 
 fn main() {
