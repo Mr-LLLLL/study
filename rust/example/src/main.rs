@@ -1,3 +1,9 @@
+// 全局声明
+#![allow(dead_code)]
+// 此声明将会查找名为 `my.rs` 或 `my/mod.rs` 的文件，并将该文件的内容放到
+// 此作用域中一个名为 `my` 的模块里面。
+mod my;
+
 use core::fmt;
 #[allow(unused)]
 use std::{
@@ -134,7 +140,7 @@ enum FooEnum {
 }
 
 #[allow(dead_code)]
-fn practice_procession() {
+fn prictise_procession() {
     let n = 5;
     if n < 0 {
         println!("{} is negative", n);
@@ -438,7 +444,7 @@ impl Pair {
 }
 
 #[allow(dead_code)]
-fn practice_function() {
+fn prictise_function() {
     let rectangle = Rectangle {
         // 静态方法使用双冒号调用
         p1: Point::origin(),
@@ -660,110 +666,360 @@ fn create_fnonce() -> impl FnOnce() {
     move || println!("This is a: {}", text)
 }
 
-mod my_mod {
-    fn private_function() {
-        println!("called `my_mod::private_function()`");
+#[allow(dead_code)]
+fn prictise_mod() {
+    let open_box = my::OpenBox {
+        contents: "public information",
+    };
+    println!("The open box contains: {}", open_box.contents);
+
+    let _closed_box = my::CloseBox::new("classified information");
+
+    use deeply::nested::function as other_function;
+    other_function();
+
+    println!("Entering block");
+    {
+        use deeply::nested::function;
+        function();
+
+        println!("Leaving block");
     }
 
-    pub fn function() {
-        println!("called `my_mod::function()`");
-    }
+    function();
 
-    pub fn indirect_access() {
-        println!("called `my_mod::indirect_access()`, that\n> ");
-        private_function();
-    }
+    my::indirect_call();
 
-    pub mod nested {
-        pub fn function() {
-            println!("called `my_mod::nested::function()`");
-        }
+    my::function();
 
-        #[allow(dead_code)]
-        fn private_function() {
-            println!("called `my_mod::nested::private_function()`");
-        }
+    function();
 
-        pub(in crate::my_mod) fn public_function_in_my_mod() {
-            println!("called `my_mod::nested::public_function_in_my_mod()`, that\n > ");
-            public_function_in_nested();
-        }
+    my::indirect_access();
 
-        // equal fn public_function_in_nested
-        pub(self) fn public_function_in_nested() {
-            println!("called `my_mod::nested::public_function_in_nested`");
-        }
-
-        pub(super) fn public_function_in_super_mod() {
-            println!("called `my_mod::nested::public_function_in_super()`");
-        }
-    }
-
-    pub fn call_public_function_in_my_mod() {
-        println!("called `my_mod::call_public_function_in_my_mod()` that\n> ");
-        nested::public_function_in_my_mod();
-        println!("> ");
-        nested::public_function_in_super_mod();
-    }
-
-    pub(crate) fn public_function_in_crate() {
-        println!("called `my_mod::public_function_in_crate()`");
-    }
-
-    mod private_nested {
-        #[allow(dead_code)]
-        pub fn function() {
-            println!("called `my_mod::private_nested::function()`");
-        }
-    }
+    my::nested::function();
 }
 
 fn function() {
     println!("called `function()`");
 }
 
-mod my {
-    pub struct OpenBox<T> {
-        pub content: T,
-    }
-
-    #[allow(dead_code)]
-    pub struct CloseBox<T> {
-        content: T,
+mod deeply {
+    pub mod nested {
+        pub fn function() {
+            println!("called `deeply::nested::function()`");
+        }
     }
 }
 
-#[allow(dead_code)]
-fn practice_mod() {
-    function();
-    my_mod::function();
-    my_mod::indirect_access();
+mod cool {
+    pub fn function() {
+        println!("called `cool::function()`");
+    }
+}
 
-    my_mod::nested::function();
-    my_mod::call_public_function_in_my_mod();
+// 这个函数仅当目标系统是 Linux 的时候才会编译
+#[cfg(target_os = "linux")]
+fn are_you_on_linux() {
+    println!("You are running linux!")
+}
 
-    my_mod::public_function_in_crate();
+// 而这个函数仅当目标系统 **不是** Linux 时才会编译
+#[cfg(not(target_os = "windows"))]
+fn are_you_on_not_windows() {
+    println!("You are *not* running windows!")
+}
 
-    // pub(in path) 项只能在指定的模块中访问
-    // 报错！函数 `public_function_in_my_mod` 是私有的
-    //my_mod::nested::public_function_in_my_mod();
-    // 试一试 ^ 取消该行的注释
+// // $ rustc --cfg some_condition custom.rs
+// #[cfg(some_condition)]
+// fn conditional_function() {
+//     println!("condition met!")
+// }
 
-    // 模块的私有项不能直接访问，即便它是嵌套在公有模块内部的
+fn prictise_attribute() {
+    are_you_on_linux();
 
-    // 报错！`private_function` 是私有的
-    //my_mod::private_function();
-    // 试一试 ^ 取消此行注释
+    println!("Are you sure?");
+    if cfg!(target_os = "linux") {
+        println!("Yes. It's definitely linux!");
+    } else {
+        println!("Yes. It's definitely *not* linux!");
+    }
+}
 
-    // 报错！`private_function` 是私有的
-    //my_mod::nested::private_function();
-    // 试一试 ^ 取消此行的注释
+struct S;
+struct GenericVal<T>(T);
 
-    // Error! `private_nested` is a private module
-    //my_mod::private_nested::function();
-    // 试一试 ^ 取消此行的注释
+impl GenericVal<f32> {}
+impl GenericVal<S> {}
+impl<T> GenericVal<T> {}
+
+struct Val {
+    val: f64,
+}
+
+struct GenVal<T> {
+    gen_val: T,
+}
+
+impl Val {
+    fn value(&self) -> &f64 {
+        &self.val
+    }
+}
+
+impl<T> GenVal<T> {
+    fn value(&self) -> &T {
+        &self.gen_val
+    }
+}
+
+struct Empty;
+struct Null;
+
+trait DoubleDrop<T> {
+    fn double_drop(self, _: T);
+}
+
+impl<T, U> DoubleDrop<T> for U {
+    fn double_drop(self, _: T) {}
+}
+
+fn printer<T: Display>(t: T) {
+    println!("{}", t);
+}
+
+use std::fmt::Debug;
+
+trait HasArea {
+    fn area(&self) -> f64;
+}
+
+#[derive(Debug)]
+struct Rectangle1 {
+    length: f64,
+    height: f64,
+}
+
+impl HasArea for Rectangle1 {
+    fn area(&self) -> f64 {
+        self.length * self.height
+    }
+}
+
+struct Triangle {
+    length: f64,
+    height: f64,
+}
+
+fn print_debug<T: Debug>(t: &T) {
+    println!("{:?}", t);
+}
+
+fn area<T: HasArea>(t: &T) -> f64 {
+    t.area()
+}
+
+struct Cardinal;
+struct BlueJay;
+struct Turkey;
+
+trait Red {}
+trait Blue {}
+
+impl Red for Cardinal {}
+impl Blue for BlueJay {}
+
+fn red<T: Red>(_: &T) -> &'static str {
+    "red"
+}
+fn blue<T: Blue>(_: &T) -> &'static str {
+    "blue"
+}
+
+fn compare_prints<T: Debug + Display>(t: &T) {
+    println!("Debug: `{:?}`", t);
+    println!("Display: `{}`", t);
+}
+
+fn compare_types<T: Debug, U: Debug>(t: &T, u: &U) {
+    println!("t: `{:?}`", t);
+    println!("u: `{:?}`", u);
+}
+
+trait PrintInOption {
+    fn print_in_option(self);
+}
+
+impl<T> PrintInOption for T
+where
+    Option<T>: Debug,
+{
+    fn print_in_option(self) {
+        println!("{:?}", Some(self));
+    }
+}
+
+struct Years(i64);
+struct Days(i64);
+
+impl Years {
+    pub fn to_days(&self) -> Days {
+        Days(self.0 * 365)
+    }
+}
+
+impl Days {
+    pub fn to_years(&self) -> Years {
+        Years(self.0 / 365)
+    }
+}
+
+fn old_enough(age: &Years) -> bool {
+    age.0 >= 18
+}
+
+struct Container(i32, i32);
+
+trait Contains {
+    type A;
+    type B;
+
+    fn contains(&self, _: &Self::A, _: &Self::B) -> bool;
+    fn first(&self) -> i32;
+    fn last(&self) -> i32;
+}
+
+impl Contains for Container {
+    type A = i32;
+    type B = i32;
+
+    fn contains(&self, n1: &Self::A, n2: &Self::B) -> bool {
+        &self.0 == n1 && &self.1 == n2
+    }
+    fn first(&self) -> i32 {
+        self.0
+    }
+    fn last(&self) -> i32 {
+        self.1
+    }
+}
+
+fn difference<C: Contains>(container: &C) -> i32 {
+    container.last() - container.first()
+}
+
+use std::marker::PhantomData;
+use std::ops::Add;
+
+// 这个虚元组结构体对 `A` 是泛型的，并且带有隐藏参数 `B`。
+#[derive(PartialEq)] // 允许这种类型进行相等测试（equality test）。
+struct PhantomTuple<A, B>(A, PhantomData<B>);
+
+#[derive(PartialEq)]
+struct PhantomStruct<A, B> {
+    first: A,
+    phantom: PhantomData<B>,
+}
+
+#[derive(Debug, Clone, Copy)]
+enum Inch {}
+#[derive(Debug, Clone, Copy)]
+enum Mm {}
+
+#[derive(Debug, Clone, Copy)]
+struct Length<Unit>(f64, PhantomData<Unit>);
+
+impl<Unit> Add for Length<Unit> {
+    type Output = Length<Unit>;
+
+    fn add(self, rhs: Length<Unit>) -> Length<Unit> {
+        Length(self.0 + rhs.0, PhantomData)
+    }
+}
+
+fn practise_generic() {
+    let x = Val { val: 3.0 };
+    let y = GenVal { gen_val: 3i32 };
+
+    println!("{}, {}", x.value(), y.value());
+
+    let empty = Empty;
+    let null = Null;
+
+    empty.double_drop(null);
+
+    let rectangle = Rectangle1 {
+        length: 3.0,
+        height: 4.0,
+    };
+    let _triangle = Triangle {
+        length: 3.0,
+        height: 4.0,
+    };
+
+    print_debug(&rectangle);
+    println!("Area: {}", area(&rectangle));
+
+    let cardinal = Cardinal;
+    let blue_jay = BlueJay;
+    let _turkey = Turkey;
+
+    println!("A cardinal is {}", red(&cardinal));
+    println!("A blue jay is {}", blue(&blue_jay));
+
+    let string = "words";
+    let array = [1, 2, 3];
+    let vec = vec![1, 2, 3];
+
+    compare_prints(&string);
+    compare_types(&array, &vec);
+
+    let vec = vec![1, 2, 3];
+    vec.print_in_option();
+
+    let age = Years(5);
+    let age_days = age.to_days();
+    println!("Old enough {}", old_enough(&age));
+    println!("Old enough {}", old_enough(&age_days.to_years()));
+
+    let n1 = 3;
+    let n2 = 10;
+    let container = Container(n1, n2);
+    println!(
+        "Does container contain {} and {}: {}",
+        &n1,
+        &n2,
+        container.contains(&n1, &n2)
+    );
+    println!("First number: {}", container.first());
+    println!("Last number: {}", container.last());
+    println!("The difference is: {}", difference(&container));
+
+    let _tuple1: PhantomTuple<char, f32> = PhantomTuple('Q', PhantomData);
+    let _tuple2: PhantomTuple<char, f32> = PhantomTuple('Q', PhantomData);
+    let _struct1: PhantomStruct<char, f32> = PhantomStruct {
+        first: 'Q',
+        phantom: PhantomData,
+    };
+    let _struct2: PhantomStruct<char, f64> = PhantomStruct {
+        first: 'Q',
+        phantom: PhantomData,
+    };
+    println!("_tuple1 == _tuple2 yields: {}", _tuple1 == _tuple2);
+
+    // 编译期错误！类型不匹配，所以这些值不能够比较：
+    // println!("_struct1 == _struct2 yields: {}", _struct1 == _struct2);
+
+    let one_foot: Length<Inch> = Length(12.0, PhantomData);
+    let one_meter: Length<Mm> = Length(1000.0, PhantomData);
+
+    let two_feat = one_foot + one_foot;
+    let two_meters = one_meter + one_meter;
+
+    println!("one foot + one foot = {:?} in", two_feat.0);
+    println!("one meter + one merter = {:?} mm", two_meters.0);
 }
 
 fn main() {
-    practice_mod()
+    practise_generic();
 }
