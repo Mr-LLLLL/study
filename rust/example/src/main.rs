@@ -1461,12 +1461,77 @@ impl Animal for Sheep {
     }
 }
 
+#[derive(PartialEq, PartialOrd)]
+struct Centimeters(f64);
+
+#[derive(Debug)]
+struct Inches(i32);
+
+impl Inches {
+    fn to_centimeters(&self) -> Centimeters {
+        let &Inches(inches) = self;
+
+        Centimeters(inches as f64 * 2.54)
+    }
+}
+
+struct Seconds(i32);
+
+struct Sheep1 {}
+struct Cow {}
+
+trait Animal1 {
+    fn noise(&self) -> &'static str;
+}
+
+impl Animal1 for Sheep1 {
+    fn noise(&self) -> &'static str {
+        "baaaaaah!"
+    }
+}
+
+impl Animal1 for Cow {
+    fn noise(&self) -> &'static str {
+        "moooooo!"
+    }
+}
+
+fn random_animal(random_number: f64) -> Box<dyn Animal1> {
+    if random_number < 0.5 {
+        Box::new(Sheep1 {})
+    } else {
+        Box::new(Cow {})
+    }
+}
+
 fn practise_trait() {
     let mut dolly: Sheep = Animal::new("Dolly");
 
     dolly.talk();
     dolly.shear();
     dolly.talk();
+
+    let _one_seconds = Seconds(1);
+
+    let foot = Inches(12);
+    println!("One foot equals {:?}", foot);
+
+    let meter = Centimeters(100.0);
+
+    let cmp = if foot.to_centimeters() < meter {
+        "smaller"
+    } else {
+        "bigger"
+    };
+
+    println!("One foot is {} than one meter.", cmp);
+
+    let random_number = 0.234;
+    let animal = random_animal(random_number);
+    println!(
+        "You've randomly chosen an animal, and it says {}",
+        animal.noise()
+    );
 }
 
 fn main() {
