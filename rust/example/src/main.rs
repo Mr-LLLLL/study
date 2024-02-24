@@ -789,7 +789,7 @@ fn printer<T: Display>(t: T) {
     println!("{}", t);
 }
 
-use std::fmt::Debug;
+use std::{fmt::Debug, iter};
 
 trait HasArea {
     fn area(&self) -> f64;
@@ -1533,6 +1533,56 @@ impl Add<Foo> for Bar {
     }
 }
 
+struct Droppable {
+    name: &'static str,
+}
+
+impl Drop for Droppable {
+    fn drop(&mut self) {
+        println!("> Dropping {}", self.name);
+    }
+}
+
+struct Fibonacci {
+    curr: u32,
+    next: u32,
+}
+
+impl Iterator for Fibonacci {
+    type Item = u32;
+    fn next(&mut self) -> Option<Self::Item> {
+        let new_next = self.curr + self.next;
+
+        self.curr = self.next;
+        self.next = new_next;
+
+        Some(self.curr)
+    }
+}
+
+fn fibonacci() -> Fibonacci {
+    Fibonacci { curr: 1, next: 1 }
+}
+
+fn combine_vecs_explicit_return_type(
+    v: Vec<i32>,
+    u: Vec<i32>,
+) -> iter::Cycle<iter::Chain<std::vec::IntoIter<i32>, std::vec::IntoIter<i32>>> {
+    v.into_iter().chain(u.into_iter()).cycle()
+}
+
+fn combine_vecs(v: Vec<i32>, u: Vec<i32>) -> impl Iterator<Item = i32> {
+    v.into_iter().chain(u.into_iter()).cycle()
+}
+
+fn make_adder_function(y: i32) -> impl Fn(i32) -> i32 {
+    move |x: i32| x + y
+}
+
+fn double_positives<'a>(numbers: &'a Vec<i32>) -> impl Iterator<Item = i32> + 'a {
+    numbers.iter().filter(|x| x > &&0).map(|x| x * 2)
+}
+
 fn practise_trait() {
     let mut dolly: Sheep = Animal::new("Dolly");
 
@@ -1564,6 +1614,71 @@ fn practise_trait() {
 
     println!("Foo + Bar = {:?}", Foo + Bar);
     println!("Bar + Foo = {:?}", Bar + Foo);
+
+    let _a = Droppable { name: "a" };
+
+    {
+        let _b = Droppable { name: "b" };
+
+        {
+            let _c = Droppable { name: "c" };
+            let _d = Droppable { name: "d" };
+
+            println!("Exiting Block B");
+        }
+        println!("Just exited block B");
+        println!("Exiting block A");
+    }
+    println!("Just exited block A");
+    println!("");
+
+    let _b = _a;
+    println!("separate");
+
+    drop(_b);
+    println!("end of the main function");
+
+    let mut sequence = 0..3;
+    println!("Four consecutive `next` calls on 0..3");
+    println!("> {:?}", sequence.next());
+    println!("> {:?}", sequence.next());
+    println!("> {:?}", sequence.next());
+    println!("> {:?}", sequence.next());
+
+    println!("Iterate throught 0..3 using `for`");
+    for i in 0..3 {
+        println!("> {}", i);
+    }
+
+    println!("The first four terms of the Fibonacci sequence are: ");
+    for i in fibonacci().take(4) {
+        println!("> {}", i);
+    }
+
+    println!("The next four terms of the Fibonacci sequence are:");
+    for i in fibonacci().skip(4).take(4) {
+        println!("> {}", i);
+    }
+
+    let array = [1u32, 3, 3, 7];
+
+    println!("Iterate the following array {:?}", &array);
+    for i in array.iter() {
+        println!("> {}", i);
+    }
+
+    let v1 = vec![1, 2, 3];
+    let v2 = vec![4, 5];
+    let mut v3 = combine_vecs(v1, v2);
+    assert_eq!(Some(1), v3.next());
+    assert_eq!(Some(2), v3.next());
+    assert_eq!(Some(3), v3.next());
+    assert_eq!(Some(4), v3.next());
+    assert_eq!(Some(5), v3.next());
+    println!("all done");
+
+    let plus_one = make_adder_function(1);
+    assert_eq!(plus_one(2), 3);
 }
 
 fn main() {
