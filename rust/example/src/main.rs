@@ -1583,6 +1583,63 @@ fn double_positives<'a>(numbers: &'a Vec<i32>) -> impl Iterator<Item = i32> + 'a
     numbers.iter().filter(|x| x > &&0).map(|x| x * 2)
 }
 
+#[derive(Debug, Clone, Copy)]
+struct Nil;
+
+#[derive(Clone, Debug)]
+struct Pair1(Box<i32>, Box<i32>);
+
+trait Person {
+    fn name(&self) -> String;
+}
+
+trait Student: Person {
+    fn university(&self) -> String;
+}
+
+trait Programmer {
+    fn fav_language(&self) -> String;
+}
+
+trait CompSciStudent: Programmer + Student {
+    fn git_usernmae(&self) -> String;
+}
+
+fn comp_sci_student_greeting(student: &dyn CompSciStudent) -> String {
+    format! {
+        "My name is {} and I attend {}. My favorite language is {}, My Git usernmae is {}",
+        student.name(),
+        student.university(),
+        student.fav_language(),
+        student.git_usernmae()
+    }
+}
+
+trait UsernameWidget {
+    fn get(&self) -> String;
+}
+
+trait AgeWidget {
+    fn get(&self) -> u8;
+}
+
+struct Form {
+    username: String,
+    age: u8,
+}
+
+impl UsernameWidget for Form {
+    fn get(&self) -> String {
+        self.username.clone()
+    }
+}
+
+impl AgeWidget for Form {
+    fn get(&self) -> u8 {
+        self.age
+    }
+}
+
 fn practise_trait() {
     let mut dolly: Sheep = Animal::new("Dolly");
 
@@ -1679,6 +1736,33 @@ fn practise_trait() {
 
     let plus_one = make_adder_function(1);
     assert_eq!(plus_one(2), 3);
+
+    let nil = Nil;
+    let copied_nil = nil;
+
+    println!("original: {:?}", nil);
+    println!("copy: {:?}", copied_nil);
+
+    let pair = Pair1(Box::new(1), Box::new(2));
+    println!("originnal: {:?}", pair);
+
+    let moved_pair = pair;
+    println!("copy: {:?}", moved_pair);
+
+    let cloned_pair = moved_pair.clone();
+    drop(moved_pair);
+
+    println!("clone: {:?}", cloned_pair);
+
+    let form = Form {
+        username: "rustacean".to_string(),
+        age: 28,
+    };
+
+    let username = UsernameWidget::get(&form);
+    assert_eq!("rustacean".to_string(), username);
+    let age = <Form as AgeWidget>::get(&form);
+    assert_eq!(28, age);
 }
 
 fn main() {
