@@ -1,6 +1,8 @@
 #![allow(dead_code)]
 
-use std::{arch::x86_64, mem};
+use std::{collections::HashMap, mem};
+
+use self::checked::sqrt;
 
 #[derive(Debug, Clone, Copy)]
 struct Point {
@@ -101,6 +103,39 @@ fn practise_vector() {
     println!("Updated vector: {:?}", xs);
 }
 
+fn checked_division(dividend: i32, divisor: i32) -> Option<i32> {
+    if divisor == 0 {
+        None
+    } else {
+        Some(dividend / divisor)
+    }
+}
+
+fn try_division(divident: i32, divisor: i32) {
+    match checked_division(divident, divisor) {
+        None => println!("{} / {} failed!", divident, divisor),
+        Some(quotient) => println!("{} / {} = {}", divident, divisor, quotient),
+    }
+}
+
+fn practise_option() {
+    try_division(4, 2);
+    try_division(1, 0);
+
+    let none: Option<i32> = None;
+    let _equivalent_none = None::<i32>;
+
+    let optional_float = Some(0f32);
+
+    println!(
+        "{:?} unwrap to {:?}",
+        optional_float,
+        optional_float.unwrap()
+    );
+
+    println!("{:?} unwrap to {:?}", none, none.unwrap());
+}
+
 fn practise_string() {
     let pangram: &'static str = "the quick brown fox jumps over the lazy dog";
     println!("Pangram: {}", pangram);
@@ -129,8 +164,176 @@ fn practise_string() {
 
     println!("Alice says: {}", alice);
     println!("Bob says: {}", bob);
+
+    println!("");
+
+    let byte_escape = "I'm writing \x52\x75\x73\x74";
+    println!("What are you doing\x3F (\\x3F means ?) {}", byte_escape);
+
+    let unicode_codepoint = "\u{211D}";
+    let character_name = "\"Double-Struck Capital R\"";
+    println!(
+        "Unicode character {} (U+211D) is called {}",
+        unicode_codepoint, character_name
+    );
+
+    let long_string = "String literals
+                            can span multiple lines,
+                            The linebreak and indentation here->\
+                            <- can be escaped too!";
+    println!("{}", long_string);
+
+    let raw_str = r"Escapes don't work here: \x3F \u{211D}";
+    println!("{}", raw_str);
+
+    let quotes = r#"And then I said: "There is no escape!""#;
+    println!("{}", quotes);
+
+    let longer_delimiter = r###"A string with "# in it. And ever "##!"###;
+    println!("{}", longer_delimiter);
+
+    println!("");
+
+    let bytestring: &[u8; 20] = b"this is a bytestring";
+    println!("A bytestring: {:?}", bytestring);
+
+    let escaped = b"\x52\x75\x73\x74 as bytes";
+    println!("Some escapted bytes: {:?}", escaped);
+
+    let raw_bytestring = br"\u{211D} is not escaped here";
+    println!("{:?}", raw_bytestring);
+
+    if let Ok(my_str) = std::str::from_utf8(bytestring) {
+        println!("And the same as text: '{}'", my_str);
+    }
+
+    // let quotes = br#"You can also use "fancier" formatting, \
+    //                 like with normal raw strings"#;
+
+    // 字节串可以不使用 UTF-8 编码
+    let shift_jis = b"\x82\xe6\x82\xa8\x82\xb1\x82"; // SHIFT-JIS 编码的 "ようこそ"
+
+    // 但这样的话它们就无法转换成 &str 了
+    match std::str::from_utf8(shift_jis) {
+        Ok(my_str) => println!("Conversion successful: '{}'", my_str),
+        Err(e) => println!("Conversion failed: {:?}", e),
+    };
+}
+
+mod checked {
+    #[derive(Debug)]
+    pub enum MathError {
+        DivideByZero,
+        NegativeLogarithm,
+        NegativeSquareRoot,
+    }
+
+    pub type MathResult = Result<f64, MathError>;
+
+    pub fn div(x: f64, y: f64) -> MathResult {
+        if y == 0.0 {
+            Err(MathError::DivideByZero)
+        } else {
+            Ok(x / y)
+        }
+    }
+
+    pub fn sqrt(x: f64) -> MathResult {
+        if x < 0.0 {
+            Err(MathError::NegativeSquareRoot)
+        } else {
+            Ok(x.sqrt())
+        }
+    }
+
+    pub fn ln(x: f64) -> MathResult {
+        if x < 0.0 {
+            Err(MathError::NegativeLogarithm)
+        } else {
+            Ok(x.ln())
+        }
+    }
+}
+
+fn op(x: f64, y: f64) -> f64 {
+    match checked::div(x, y) {
+        Err(why) => panic!("{:?}", why),
+        Ok(ratio) => match checked::ln(ratio) {
+            Err(why) => panic!("{:?}", why),
+            Ok(ln) => match checked::sqrt(ln) {
+                Err(why) => panic!("{:?}", why),
+                Ok(sqrt) => sqrt,
+            },
+        },
+    }
+}
+
+fn op_with_question_expresssion(x: f64, y: f64) -> checked::MathResult {
+    let ratio = checked::div(x, y)?;
+
+    let ln = checked::ln(ratio)?;
+
+    checked::sqrt(ln)
+}
+
+fn division(divident: i32, divisor: i32) -> i32 {
+    if divisor == 0 {
+        panic!("Cannot divide by zero");
+    } else {
+        divident / divisor
+    }
+}
+
+fn practise_result() {
+    // println!("{}", op(1.0, 10.0));
+
+    let _x = Box::new(0i32);
+    division(3, 0);
+
+    println!("This point won't be reached!");
+}
+
+fn practise_hashmap() {
+    let mut contacts = HashMap::new();
+
+    contacts.insert("Daniel", "798-1364");
+    contacts.insert("Ashley", "645-8689");
+    contacts.insert("Katie", "435-8291");
+    contacts.insert("Robert", "956-1745");
+
+    match contacts.get(&"Daniel") {
+        Some(&number) => println!("Calling Daniel: {}", call(number)),
+        _ => println!("Do' know Daniel's number."),
+    }
+
+    contacts.insert("Daniel", "164-6743");
+
+    match contacts.get(&"Ashley") {
+        Some(&number) => println!("Calling Ashley: {}", call(number)),
+        _ => println!("Do' know Ashley's number."),
+    }
+
+    contacts.remove(&"Ashley");
+
+    for (contact, &number) in contacts.iter() {
+        println!("Calling {}: {}", contact, call(number));
+    }
+}
+
+fn call(number: &str) -> &str {
+    match number {
+        "798-1364" => {
+            "We're sorry, the call cannot be completed as dialed. 
+            Please hang up and try again."
+        }
+        "645-7689" => {
+            "Hello, this is Mr. Awesome's Pizza. My name is Fred.
+            What can I get for you today?"
+        }
+        _ => "Hi! Who is this again?",
+    }
 }
 
 pub fn practise_std() {
-    practise_string()
+    practise_hashmap();
 }
