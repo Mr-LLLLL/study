@@ -5,6 +5,7 @@
 mod error;
 mod macro_prac;
 mod my;
+mod std_lib;
 
 use core::fmt;
 #[allow(unused)]
@@ -1769,5 +1770,5 @@ fn practise_trait() {
 }
 
 fn main() {
-    error::practise_error();
+    std_lib::practise_std()
 }

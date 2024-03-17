@@ -1,3 +1,6 @@
+use std::num::ParseIntError;
+use std::{error, fmt};
+
 fn give_princess(gift: &str) {
     if gift == "snake" {
         panic!("AAAaaaaa!!!");
@@ -142,6 +145,155 @@ fn eat_v2(food: Food, day: Day) {
     }
 }
 
+type AliasedResult<T> = Result<T, ParseIntError>;
+
+fn multiply2(first_number_str: &str, second_number_str: &str) -> AliasedResult<i32> {
+    let first_number = r#try!(first_number_str.parse::<i32>());
+    let second_number = r#try!(second_number_str.parse::<i32>());
+
+    Ok(first_number * second_number)
+}
+
+fn multiply1(first_number_str: &str, second_number_str: &str) -> AliasedResult<i32> {
+    let first_number = first_number_str.parse::<i32>()?;
+    let second_number = second_number_str.parse::<i32>()?;
+
+    Ok(first_number * second_number)
+}
+
+fn multiply(first_number_str: &str, second_number_str: &str) -> AliasedResult<i32> {
+    first_number_str.parse::<i32>().and_then(|first_number| {
+        second_number_str
+            .parse::<i32>()
+            .map(|second_number| first_number * second_number)
+    })
+}
+
+fn print(result: AliasedResult<i32>) {
+    match result {
+        Ok(n) => println!("n is {}", n),
+        Err(e) => println!("Error: {}", e),
+    }
+}
+
+#[derive(Debug, Clone)]
+struct DoubleError;
+
+type Result1<T> = std::result::Result<T, DoubleError>;
+
+impl fmt::Display for DoubleError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "invalid first item to double")
+    }
+}
+
+impl error::Error for DoubleError {
+    fn source(&self) -> Option<&(dyn error::Error + 'static)> {
+        None
+    }
+}
+
+fn double_first1(vec: &Vec<&str>) -> Result1<i32> {
+    vec.first()
+        .ok_or(DoubleError)
+        .and_then(|s| s.parse::<i32>().map_err(|_| DoubleError).map(|i| 2 * i))
+}
+
+fn print1(result: Result1<i32>) {
+    match result {
+        Ok(n) => println!("The first doubled is {}", n),
+        Err(e) => println!("Error: {}", e),
+    }
+}
+
+type Result2<T> = std::result::Result<T, Box<dyn error::Error>>;
+
+#[derive(Debug, Clone)]
+struct EmptyVec;
+
+impl fmt::Display for EmptyVec {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "invalid first item to double")
+    }
+}
+
+impl error::Error for EmptyVec {
+    fn description(&self) -> &str {
+        "inalid first item to double"
+    }
+
+    fn cause(&self) -> Option<&dyn error::Error> {
+        None
+    }
+}
+
+fn double_first2(vec: &Vec<&str>) -> Result2<i32> {
+    vec.first()
+        .ok_or_else(|| EmptyVec.into())
+        .and_then(|s| s.parse::<i32>().map_err(|e| e.into()).map(|i| 2 * i))
+}
+
+fn double_first3(vec: &Vec<&str>) -> Result2<i32> {
+    let first = vec.first().ok_or(EmptyVec)?;
+    let parsed = first.parse::<i32>()?;
+    Ok(2 * parsed)
+}
+
+fn print2(result: Result2<i32>) {
+    match result {
+        Ok(n) => println!("The first doubled is {}", n),
+        Err(e) => println!("Error: {}", e),
+    }
+}
+
+#[derive(Debug)]
+enum DoubleErrorEnum {
+    EmptyVec,
+    Parse(ParseIntError),
+}
+
+type Result3<T> = std::result::Result<T, DoubleErrorEnum>;
+
+impl fmt::Display for DoubleErrorEnum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match *self {
+            DoubleErrorEnum::EmptyVec => {
+                write!(f, "please use a vector with at least one element")
+            }
+            DoubleErrorEnum::Parse(ref e) => e.fmt(f),
+        }
+    }
+}
+
+impl error::Error for DoubleErrorEnum {
+    fn source(&self) -> Option<&(dyn error::Error + 'static)> {
+        match *self {
+            DoubleErrorEnum::EmptyVec => None,
+            DoubleErrorEnum::Parse(ref e) => Some(e),
+        }
+    }
+}
+
+impl From<ParseIntError> for DoubleErrorEnum {
+    fn from(value: ParseIntError) -> Self {
+        DoubleErrorEnum::Parse(value)
+    }
+}
+
+fn double_first4(vec: &Vec<&str>) -> Result3<i32> {
+    let first = vec.first().ok_or(DoubleErrorEnum::EmptyVec)?;
+    let parsed = first.parse::<i32>()?;
+
+    Ok(2 * parsed)
+}
+
+fn print4(result: Result3<i32>) {
+    match result {
+        Ok(n) => println!("The first doubled is {}", n),
+        Err(e) => println!("Error: {}", e),
+    }
+}
+
 pub fn practise_error() {
     let food = Some("chicken");
     let snake = Some("snake");
@@ -186,4 +338,60 @@ pub fn practise_error() {
     eat_v2(cordon_blue, Day::Monday);
     eat_v2(steak, Day::Tuesday);
     eat_v2(sushi, Day::Wednesday);
+
+    let twenty = multiply("10", "2");
+    print(twenty);
+
+    let tt = multiply("t", "2");
+    let tt1 = multiply1("t", "2");
+    let tt2 = multiply1("t", "2");
+    print(tt);
+    print(tt1);
+    print(tt2);
+
+    let numbers = vec!["42", "93", "18"];
+    let empty = vec![];
+    let strings = vec!["tofu", "93", "18"];
+
+    print1(double_first1(&numbers));
+    print1(double_first1(&empty));
+    print1(double_first1(&strings));
+
+    println!("");
+
+    print2(double_first2(&numbers));
+    print2(double_first2(&empty));
+    print2(double_first2(&strings));
+
+    println!("");
+
+    print2(double_first3(&numbers));
+    print2(double_first3(&empty));
+    print2(double_first3(&strings));
+
+    println!("");
+
+    print4(double_first4(&numbers));
+    print4(double_first4(&empty));
+    print4(double_first4(&strings));
+
+    let numbers: Vec<i32> = strings
+        .iter()
+        .filter_map(|s| s.parse::<i32>().ok())
+        .collect();
+    println!("Results: {:?}", numbers);
+
+    let numbers: Result<Vec<_>, _> = strings.iter().map(|s| s.parse::<i32>()).collect();
+    println!("Result: {:?}", numbers);
+
+    let (numbers, errors): (Vec<_>, Vec<_>) = strings
+        .iter()
+        .map(|s| s.parse::<i32>())
+        .partition(Result::is_ok);
+
+    let numbers: Vec<_> = numbers.iter().map(|e| e.clone().unwrap()).collect();
+    let errors: Vec<_> = errors.into_iter().map(Result::unwrap_err).collect();
+
+    println!("Numbers: {:?}", numbers);
+    println!("Errors: {:?}", errors);
 }
