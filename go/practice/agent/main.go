@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/tls"
+	"flag"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -11,8 +12,10 @@ import (
 )
 
 func main() {
-	target, err := url.Parse("http://share-arch-cicd-proxy.sit.yumc.local")
-	// target, err := url.Parse("http://10.1.2.202:9300")
+	host := flag.String("h", "https://code.hwwt2.com", "host")
+	flag.Parse()
+
+	target, err := url.Parse(*host)
 	if err != nil {
 		log.Fatal(err)
 	}
