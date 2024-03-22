@@ -6,6 +6,8 @@ use std::{
 };
 
 use std::rc::Rc;
+use std::sync::Arc;
+use std::thread;
 
 use self::checked::sqrt;
 
@@ -437,6 +439,18 @@ fn practise_rc() {
     }
 }
 
+fn practise_arc() {
+    let apple = Arc::new("the same apple");
+
+    for _ in 0..10 {
+        let apple = Arc::clone(&apple);
+
+        thread::spawn(move || {
+            println!("{:?}", apple);
+        });
+    }
+}
+
 pub fn practise_std() {
-    practise_rc();
+    practise_arc();
 }
