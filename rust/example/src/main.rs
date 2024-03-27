@@ -6,6 +6,7 @@ mod error;
 mod macro_prac;
 mod my;
 mod std_lib;
+mod test;
 
 use core::fmt;
 #[allow(unused)]

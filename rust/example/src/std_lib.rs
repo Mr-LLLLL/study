@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 
+use core::fmt;
 use std::{
     collections::{HashMap, HashSet},
     mem,
@@ -451,6 +452,394 @@ fn practise_arc() {
     }
 }
 
+static NTHREADS: i32 = 10;
+
+fn practise_thread() {
+    let mut children = vec![];
+
+    for i in 0..NTHREADS {
+        children.push(thread::spawn(move || {
+            println!("this is thread number {}", i);
+        }));
+    }
+
+    for child in children {
+        let _ = child.join();
+    }
+
+    let data = "86967897737416471853297327050364959
+11861322575564723963297542624962850
+70856234701860851907960690014725639
+38397966707106094172783238747669219
+52380795257888236525459303330302837
+58495327135744041048897885734297812
+69920216438980873548808413720956532
+16278424637452589860345374828574668";
+
+    let mut children = vec![];
+
+    let chunked_data = data.split_whitespace();
+    for (i, data_segment) in chunked_data.enumerate() {
+        children.push(thread::spawn(move || -> u32 {
+            let result = data_segment
+                .chars()
+                .map(|c| c.to_digit(10).expect("should be a digit"))
+                .sum();
+
+            println!("precessed segment {}, result = {}", i, result);
+
+            result
+        }));
+    }
+
+    let mut intermediate_sums = vec![];
+    for child in children {
+        let intermediate_sum = child.join().unwrap();
+        intermediate_sums.push(intermediate_sum);
+    }
+
+    let final_result = intermediate_sums.iter().sum::<u32>();
+
+    println!("Final sum result: {}", final_result);
+}
+
+use std::sync::mpsc;
+use std::sync::mpsc::{Receiver, Sender};
+
+fn practise_channel() {
+    // 通道有两个端点：`Sender<T>` 和 `Receiver<T>`，其中 `T` 是要发送
+    // 的消息的类型（类型标注是可选的）
+    let (tx, rx): (Sender<i32>, Receiver<i32>) = mpsc::channel();
+
+    for id in 0..NTHREADS {
+        // sender 端可被复制
+        let thread_tx = tx.clone();
+
+        // 每个线程都将通过通道来发送它的 id
+        thread::spawn(move || {
+            // 被创建的线程取得 `thread_tx` 的所有权
+            // 每个线程都把消息放在通道的消息队列中
+            thread_tx.send(id).unwrap();
+
+            // 发送是一个非阻塞（non-blocking）操作，线程将在发送完消息后
+            // 会立即继续进行
+            println!("thread {} finished", id);
+        });
+    }
+
+    // 所有消息都在此处被收集
+    let mut ids = Vec::with_capacity(NTHREADS as usize);
+    for _ in 0..NTHREADS {
+        // `recv` 方法从通道中拿到一个消息
+        // 若无可用消息的话，`recv` 将阻止当前线程
+        ids.push(rx.recv());
+    }
+
+    // 显示消息被发送的次序
+    println!("{:?}", ids);
+}
+
+use std::path::Path;
+
+fn practise_path() {
+    let path = Path::new(".");
+
+    let display = path.display();
+
+    let new_path = path.join("a").join("b");
+
+    match new_path.to_str() {
+        None => panic!("new path is not a valid UTF-8 sequence"),
+        Some(s) => println!("new path is {}", s),
+    }
+}
+
+use std::fs;
+use std::fs::{File, OpenOptions};
+use std::io::prelude::*;
+use std::io::{self, BufRead};
+
+static LOREM_IPSUM: &'static str =
+    "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+";
+
+fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
+where
+    P: AsRef<Path>,
+{
+    let file = File::open(filename)?;
+    Ok(io::BufReader::new(file).lines())
+}
+
+fn practise_file() {
+    let pathname = "lorem_ipsum.txt";
+
+    let path = Path::new(pathname);
+    let display = path.display();
+    let mut file = match File::create(&path) {
+        Err(why) => panic!("couldn't create {}: {:?}", display, why),
+        Ok(file) => file,
+    };
+
+    match file.write_all(LOREM_IPSUM.as_bytes()) {
+        Err(why) => panic!("couldn't wrte to {}: {:?}", display, why),
+        Ok(_) => println!("successfully wrote to {}", display),
+    }
+
+    let mut file = match File::open(&path) {
+        Err(why) => panic!("counln't open {}: {:?}", display, why),
+        Ok(file) => file,
+    };
+
+    let mut s = String::new();
+    match file.read_to_string(&mut s) {
+        Err(why) => panic!("couldn't read {}: {:?}", display, why),
+        Ok(_) => println!("{} contains:\n{}", display, s),
+    }
+
+    if let Ok(lines) = read_lines(pathname) {
+        for line in lines {
+            if let Ok(content) = line {
+                println!("{}", content);
+            }
+        }
+    }
+}
+
+use std::process::{Command, Stdio};
+
+fn practise_process() {
+    let output = Command::new("rustc")
+        .arg("--version")
+        .output()
+        .unwrap_or_else(|e| panic!("failed to execute process: {}", e));
+
+    if output.status.success() {
+        let s = String::from_utf8_lossy(&output.stdout);
+
+        println!("rustc succeeded and stdout was:\n{}", s);
+    } else {
+        let s = String::from_utf8_lossy(&output.stderr);
+
+        println!("rustc failed and stderr was:\n{}", s);
+    }
+}
+
+static PANGRAM: &'static str = "the quick brown fox jumps over the lazy dog";
+
+fn practise_pipe() {
+    let process = match Command::new("wc")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .spawn()
+    {
+        Err(why) => panic!("couldn't spawn wc: {:?}", why),
+        Ok(process) => process,
+    };
+
+    match process.stdin.unwrap().write_all(PANGRAM.as_bytes()) {
+        Err(why) => panic!("couldn't write to wc stdin: {:?}", why),
+        Ok(_) => println!("sent pangram to wc"),
+    }
+
+    let mut s = String::new();
+    match process.stdout.unwrap().read_to_string(&mut s) {
+        Err(why) => panic!("couldn't read wc stdout: {:?}", why),
+        Ok(_) => print!("wc responsed with:\n{}", s),
+    }
+
+    let mut child = Command::new("sleep").arg("5").spawn().unwrap();
+    let _result = child.wait().unwrap();
+
+    println!("reached end of main");
+}
+
+use std::os::unix;
+
+fn cat(path: &Path) -> io::Result<String> {
+    let mut f = File::open(path)?;
+    let mut s = String::new();
+    match f.read_to_string(&mut s) {
+        Ok(_) => Ok(s),
+        Err(e) => Err(e),
+    }
+}
+
+fn echo(s: &str, path: &Path) -> io::Result<()> {
+    let mut f = File::create(path)?;
+
+    f.write_all(s.as_bytes())
+}
+
+fn touch(path: &Path) -> io::Result<()> {
+    match OpenOptions::new().create(true).write(true).open(path) {
+        Ok(_) => Ok(()),
+        Err(e) => Err(e),
+    }
+}
+
+fn practise_fs() {
+    println!("`mkdir a`");
+    match fs::create_dir("a") {
+        Err(why) => println!("! {:?}", why.kind()),
+        Ok(_) => {}
+    }
+
+    println!("`echo hello > a/b.txt`");
+    echo("hello", &Path::new("a/b.txt")).unwrap_or_else(|why| {
+        println!("! {:?}", why.kind());
+    });
+
+    println!("`mkdir -p a/c/d`");
+    fs::create_dir_all("a/c/d").unwrap_or_else(|why| {
+        println!("! {:?}", why.kind());
+    });
+
+    println!("`touch a/c/e.txt`");
+    touch(&Path::new("a/c/e.txt")).unwrap_or_else(|why| {
+        println!("! {:?}", why.kind());
+    });
+
+    println!("`ln -s ../b.txt a/c/b.txt`");
+    if cfg!(target_family = "unix") {
+        unix::fs::symlink("../b.txt", "a/c/b.txt").unwrap_or_else(|why| {
+            println!("! {:?}", why.kind());
+        });
+    }
+
+    println!("`cat a/c/b.txt`");
+    match cat(&Path::new("a/c/b.txt")) {
+        Err(why) => println!("! {:?}", why.kind()),
+        Ok(s) => println!("> {}", s),
+    }
+
+    println!("`ls a`");
+    match fs::read_dir("a") {
+        Err(why) => println!("! {:?}", why.kind()),
+        Ok(paths) => {
+            for path in paths {
+                println!("> {:?}", path.unwrap().path());
+            }
+        }
+    }
+
+    println!("`rm a/c/e.txt`");
+    fs::remove_file("a/c/e.txt").unwrap_or_else(|why| {
+        println!("! {:?}", why.kind());
+    });
+
+    println!("`rmdir a/c/d`");
+    fs::remove_dir("a/c/d").unwrap_or_else(|why| {
+        println!("! {:?}", why.kind());
+    });
+}
+
+use std::env;
+
+fn practise_arg() {
+    let args: Vec<String> = env::args().collect();
+
+    println!("My path is {}", args[0]);
+
+    println!("I got {:?} arguments: {:?}", args.len() - 1, &args[1..]);
+
+    let args: Vec<String> = env::args().collect();
+
+    match args.len() {
+        1 => {
+            println!("My name is 'match_args'. Try passing some arguments!")
+        }
+        2 => match args[1].parse() {
+            Ok(42) => println!("This is the answer!"),
+            _ => println!("This is not the answer."),
+        },
+        3 => {
+            let cmd = &args[1];
+            let num = &args[2];
+            let number: i32 = match num.parse() {
+                Ok(n) => n,
+                Err(_) => {
+                    println!("error: second argument not an integer");
+                    help();
+                    return;
+                }
+            };
+            match &cmd[..] {
+                "increase" => increase(number),
+                "decrease" => decrease(number),
+                _ => {
+                    println!("error: invalid command");
+                    help();
+                }
+            }
+        }
+        _ => {
+            help();
+        }
+    }
+}
+
+fn increase(number: i32) {
+    println!("{}", number + 1);
+}
+
+fn decrease(number: i32) {
+    println!("{}", number - 1);
+}
+
+fn help() {
+    println!(
+        "usage:
+match_args <string>
+    Check whether given string is the answer.
+match_args {{increase|decrease}} <integer>
+    Increase or decrease given integer by one."
+    );
+}
+
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct Complex {
+    re: f32,
+    im: f32,
+}
+
+impl fmt::Debug for Complex {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        if self.im < 0. {
+            write!(f, "{}-{}i", self.re, -self.im)
+        } else {
+            write!(f, "{}+{}i", self.re, self.im)
+        }
+    }
+}
+
+#[link(name = "m")]
+extern "C" {
+    fn csqrtf(z: Complex) -> Complex;
+
+    fn ccosf(z: Complex) -> Complex;
+}
+
+fn cos(z: Complex) -> Complex {
+    unsafe { ccosf(z) }
+}
+
+fn practise_ffi() {
+    let z = Complex { re: -1., im: 0. };
+
+    let z_sqrt = unsafe { csqrtf(z) };
+
+    println!("the square root of {:?} is {:?}", z, z_sqrt);
+
+    println!("cos({:?}) = {:?}", z, cos(z));
+}
+
 pub fn practise_std() {
-    practise_arc();
+    practise_ffi();
 }
