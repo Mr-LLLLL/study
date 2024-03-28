@@ -8,6 +8,7 @@ fn bad_add(a: i32, b: i32) -> i32 {
 mod tests {
     // 注意这个惯用法：在 tests 模块中，从外部作用域导入所有名字。
     use super::*;
+    use pretty_assertions::assert_eq; // 仅用于测试, 不能在非测试代码中使用
 
     #[test]
     fn test_add() {
