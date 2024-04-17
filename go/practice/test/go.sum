@@ -334,6 +334,7 @@ github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81P
 github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.7.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
+github.com/stretchr/testify v1.7.4/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO+kdMU+MU=
 github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO+kdMU+MU=
 github.com/stretchr/testify v1.8.2 h1:+h33VjcLVPDHtOdpUCuF+7gSuG3yGIftsP1YvFihtJ8=
 github.com/stretchr/testify v1.8.2/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
@@ -363,6 +364,8 @@ github.com/xtaci/kcp-go v5.4.5+incompatible/go.mod h1:bN6vIwHQbfHaHtFpEssmWsN45a
 github.com/xtaci/lossyconn v0.0.0-20190602105132-8df528c0c9ae/go.mod h1:gXtu8J62kEgmN++bm9BVICuT/e8yiLI2KFobd/TRFsE=
 gitlab.cd.anpro/go/common v0.1.28 h1:eo5Lkq3/Xr4f1HOGJbMTZadDRcAPBrN7zeTAZJHxvtI=
 gitlab.cd.anpro/go/common v0.1.28/go.mod h1:EJ6v995w9oh6fV24c/uOgofH4Ku1DiayVgUiLz5SEOM=
+gitlab.cd.anpro/go/third-go-tree-sitter v0.0.2-0.20240218091648-0d0243b79e4d h1:CMIYYU4lZOZaGvoao71NLIORLVS+H6bydNnwocHcXpc=
+gitlab.cd.anpro/go/third-go-tree-sitter v0.0.2-0.20240218091648-0d0243b79e4d/go.mod h1:ifHJR/Vbt3DahUUd86k4vIUKpTP0xKXGzoUAibW75no=
 go.etcd.io/bbolt v1.3.4/go.mod h1:G5EMThwa9y8QZGBClrRx5EY+Yw9kAhnjy3bSjsnlVTQ=
 go.etcd.io/etcd v0.0.0-20200402134248-51bdeb39e698/go.mod h1:YoUyTScD3Vcv2RBm3eGVOq7i1ULiz3OuXoQFWOirmAM=
 go.opencensus.io v0.21.0/go.mod h1:mSImk1erAIZhrmZN+AvHh14ztQfjbGwt4TtuofqLduU=

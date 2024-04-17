@@ -47,6 +47,7 @@ require (
 	github.com/prometheus/common v0.9.1 // indirect
 	github.com/prometheus/procfs v0.0.11 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
+	gitlab.cd.anpro/go/third-go-tree-sitter v0.0.2-0.20240218091648-0d0243b79e4d // indirect
 	golang.org/x/sys v0.10.0 // indirect
 	google.golang.org/grpc v1.58.2 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
