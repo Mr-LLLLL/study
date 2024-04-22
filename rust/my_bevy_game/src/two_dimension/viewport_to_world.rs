@@ -1,5 +1,3 @@
-use std::{thread::sleep, time::Duration};
-
 use bevy::prelude::*;
 
 pub fn run() {
@@ -24,8 +22,6 @@ fn draw_cursor(
     let Some(point) = camera.viewport_to_world_2d(camera_transform, cursor_position) else {
         return;
     };
-
-    sleep(Duration::from_secs(1));
 
     gizmos.circle_2d(point, 10., Color::WHITE);
 }
