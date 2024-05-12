@@ -8,6 +8,7 @@ edition = "2021"
 # NOTE: Remember to revert this before releasing your game! Otherwise you will need to include libbevy_dylib alongside your game if you want it to run. If you remove the "dynamic" feature, your game executable can run standalone.
 [dependencies]
 bevy = { version = "0.13.1", features = ["dynamic_linking"] }
+rand = "0.8.5"
 
 [workspace]
 resolver = "2" # Important! wgpu/Bevy needs this!

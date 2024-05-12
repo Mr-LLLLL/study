@@ -1,8 +1,9 @@
 #![allow(dead_code)]
 
+mod games;
 mod hello;
 mod two_dimension;
 
 fn main() {
-    two_dimension::custom_gltf_vertex_attribute::run();
+    games::alien_cake_addict::run();
 }
