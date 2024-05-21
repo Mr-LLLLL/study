@@ -5,5 +5,5 @@ mod hello;
 mod two_dimension;
 
 fn main() {
-    games::alien_cake_addict::run();
+    two_dimension::mesh2d_vertex_color_texture::run();
 }
