@@ -5,5 +5,5 @@ mod hello;
 mod two_dimension;
 
 fn main() {
-    two_dimension::move_sprite::run();
+    two_dimension::sprite_sheet::run();
 }
