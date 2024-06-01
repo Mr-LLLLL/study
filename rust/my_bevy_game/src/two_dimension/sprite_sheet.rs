@@ -53,7 +53,7 @@ fn setup(
             transform: Transform::from_scale(Vec3::splat(6.)),
             ..default()
         },
-        animation_indices,
         AnimationTimer(Timer::from_seconds(0.1, TimerMode::Repeating)),
+        animation_indices,
     ));
 }

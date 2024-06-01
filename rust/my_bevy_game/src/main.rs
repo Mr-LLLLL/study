@@ -5,5 +5,5 @@ mod hello;
 mod two_dimension;
 
 fn main() {
-    two_dimension::sprite_sheet::run();
+    two_dimension::pixel_grid_snap::run();
 }
