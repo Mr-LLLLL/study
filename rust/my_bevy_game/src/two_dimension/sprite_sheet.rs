@@ -38,7 +38,7 @@ fn setup(
     asset_server: Res<AssetServer>,
     mut texture_atlas_layouts: ResMut<Assets<TextureAtlasLayout>>,
 ) {
-    let texture = asset_server.load("texture/rpg/chars/gabe/gabe-idle-run.png");
+    let texture = asset_server.load("textures/rpg/chars/gabe/gabe-idle-run.png");
     let layout = TextureAtlasLayout::from_grid(Vec2::new(24., 24.), 7, 1, None, None);
     let texture_atlas_layout = texture_atlas_layouts.add(layout);
     let animation_indices = AnimationIndices { first: 1, last: 6 };
