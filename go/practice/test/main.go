@@ -2,21 +2,14 @@ package main
 
 import (
 	"fmt"
-	"runtime"
+	"path/filepath"
 )
 
-type str struct {
-	name string
-	ss   []*str
-}
-
-type snippet struct{}
-
 func main() {
-	runtime.GOMAXPROCS(55)
-	fmt.Println(runtime.GOMAXPROCS(0))
+	fmt.Println("hello")
+	filepath.Join()
 }
 
-func (s *str) test() {
-	s = nil
+func hello() {
+	fmt.Println()
 }
