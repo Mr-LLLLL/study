@@ -12,9 +12,7 @@ print(a)
 
 for value in a:
     print(value)
-print(b)
 print(list(b))
-
 print("================")
 
 
@@ -24,3 +22,12 @@ def func(size, *args):
 
 
 func(1, "ksdjfks")
+
+"""
+sdfj
+"""
+
+
+class a:
+    def func(size):
+        print(size)
