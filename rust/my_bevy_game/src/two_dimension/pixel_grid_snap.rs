@@ -16,7 +16,7 @@ pub fn run() {
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
         .insert_resource(Msaa::Off)
         .add_systems(Startup, (setup_camera, setup_sprite, setup_mesh))
-        .add_systems(Update, (rotate, fit_canvas))
+        .add_systems(Update, (rotate, fit_canvas, bevy::window::close_on_esc))
         .run();
 }
 

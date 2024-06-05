@@ -5,5 +5,5 @@ mod hello;
 mod two_dimension;
 
 fn main() {
-    two_dimension::rotation::run();
+    two_dimension::pixel_grid_snap::run();
 }
