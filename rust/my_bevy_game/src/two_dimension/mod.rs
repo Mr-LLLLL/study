@@ -7,5 +7,6 @@ pub mod pixel_grid_snap;
 pub mod rotation;
 pub mod shapes;
 pub mod sprite_sheet;
+pub mod text;
 pub mod transparency_2d;
 pub mod viewport_to_world;
