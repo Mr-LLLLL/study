@@ -3,7 +3,8 @@
 mod games;
 mod hello;
 mod two_dimension;
+mod window;
 
 fn main() {
-    two_dimension::pixel_grid_snap::run();
+    window::multiple_windows::run();
 }
