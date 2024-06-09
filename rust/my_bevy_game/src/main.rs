@@ -6,5 +6,5 @@ mod two_dimension;
 mod window;
 
 fn main() {
-    window::multiple_windows::run();
+    two_dimension::move_sprite::run();
 }

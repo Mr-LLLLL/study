@@ -19,16 +19,23 @@ fn setup_scene(mut commands: Commands, asset_server: Res<AssetServer>) {
         ..default()
     });
 
-    let first_window_camera = commands
-        .spawn(Camera3dBundle {
-            transform: Transform::from_xyz(0., 0., 6.).looking_at(Vec3::ZERO, Vec3::Y),
+    let second_window = commands
+        .spawn(Window {
+            title: "Second window".to_owned(),
             ..default()
         })
         .id();
 
-    let second_window = commands
+    let third_window = commands
         .spawn(Window {
-            title: "Second window".to_owned(),
+            title: "Third window".to_owned(),
+            ..default()
+        })
+        .id();
+
+    let first_window_camera = commands
+        .spawn(Camera3dBundle {
+            transform: Transform::from_xyz(0., 0., 6.).looking_at(Vec3::ZERO, Vec3::Y),
             ..default()
         })
         .id();
@@ -38,6 +45,17 @@ fn setup_scene(mut commands: Commands, asset_server: Res<AssetServer>) {
             transform: Transform::from_xyz(6., 0., 0.).looking_at(Vec3::ZERO, Vec3::Y),
             camera: Camera {
                 target: RenderTarget::Window(WindowRef::Entity(second_window)),
+                ..default()
+            },
+            ..default()
+        })
+        .id();
+
+    let third_window_camera = commands
+        .spawn(Camera3dBundle {
+            transform: Transform::from_xyz(0., 6., 0.).looking_at(Vec3::ZERO, Vec3::Y),
+            camera: Camera {
+                target: RenderTarget::Window(WindowRef::Entity(third_window)),
                 ..default()
             },
             ..default()
@@ -58,6 +76,15 @@ fn setup_scene(mut commands: Commands, asset_server: Res<AssetServer>) {
         .with_children(|parent| {
             parent.spawn(TextBundle::from_section(
                 "Second window",
+                TextStyle::default(),
+            ));
+        });
+
+    commands
+        .spawn((NodeBundle::default(), TargetCamera(third_window_camera)))
+        .with_children(|parent| {
+            parent.spawn(TextBundle::from_section(
+                "Third window",
                 TextStyle::default(),
             ));
         });
