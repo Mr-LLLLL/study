@@ -6,7 +6,7 @@
 
 use bevy::{input::keyboard::KeyboardInput, prelude::*};
 
-fn main() {
+pub fn run() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_systems(Startup, setup_scene)
@@ -18,6 +18,7 @@ fn main() {
                 listen_received_character_events,
                 listen_keyboard_input_events,
                 bubbling_text,
+                bevy::window::close_on_esc,
             ),
         )
         .run();
@@ -120,9 +121,6 @@ fn toggle_ime(
 struct Bubble {
     timer: Timer,
 }
-
-#[derive(Component)]
-struct ImePreedit;
 
 fn bubbling_text(
     mut commands: Commands,
