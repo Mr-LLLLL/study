@@ -2,9 +2,10 @@
 
 mod games;
 mod hello;
+mod input;
 mod two_dimension;
 mod window;
 
 fn main() {
-    two_dimension::move_sprite::run();
+    input::text_input::run();
 }

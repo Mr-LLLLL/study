@@ -6,6 +6,7 @@ pub mod move_sprite;
 pub mod pixel_grid_snap;
 pub mod rotation;
 pub mod shapes;
+pub mod sprite_flipping;
 pub mod sprite_sheet;
 pub mod text;
 pub mod transparency_2d;
