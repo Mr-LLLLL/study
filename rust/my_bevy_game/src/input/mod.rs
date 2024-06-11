@@ -2,4 +2,8 @@ pub mod char_input_events;
 pub mod keyboard_input;
 pub mod keyboard_input_events;
 pub mod keyboard_modifiers;
+pub mod mouse_grab;
+pub mod mouse_input;
+pub mod mouse_input_events;
 pub mod text_input;
+pub mod touch_input;

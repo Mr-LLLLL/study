@@ -7,5 +7,5 @@ mod two_dimension;
 mod window;
 
 fn main() {
-    input::text_input::run();
+    input::touch_input::run();
 }
