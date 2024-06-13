@@ -7,5 +7,5 @@ mod two_dimension;
 mod window;
 
 fn main() {
-    input::touch_input::run();
+    two_dimension::bloom::run();
 }

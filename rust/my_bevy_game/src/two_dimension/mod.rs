@@ -1,3 +1,4 @@
+pub mod bloom;
 pub mod custom_gltf_vertex_attribute;
 pub mod gizmos;
 pub mod mesh2d;
