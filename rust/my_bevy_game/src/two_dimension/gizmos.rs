@@ -9,7 +9,14 @@ pub fn run() {
         .add_plugins(DefaultPlugins)
         .init_gizmo_group::<MyRoundGizmos>()
         .add_systems(Startup, setup)
-        .add_systems(Update, (draw_example_collection, update_config))
+        .add_systems(
+            Update,
+            (
+                draw_example_collection,
+                update_config,
+                bevy::window::close_on_esc,
+            ),
+        )
         .run();
 }
 
