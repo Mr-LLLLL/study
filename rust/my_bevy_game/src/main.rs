@@ -7,5 +7,5 @@ mod two_dimension;
 mod window;
 
 fn main() {
-    two_dimension::bounding::run();
+    two_dimension::sprite_slice::run();
 }
