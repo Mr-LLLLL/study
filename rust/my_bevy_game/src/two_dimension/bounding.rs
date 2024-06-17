@@ -20,7 +20,7 @@ pub fn run() {
             (
                 render_shape,
                 (
-                    aabb_intersectino_system.run_if(in_state(Test::AabbCast)),
+                    aabb_intersectino_system.run_if(in_state(Test::AabbSweep)),
                     circle_intersection_system.run_if(in_state(Test::CircleSweep)),
                     ray_cast_system.run_if(in_state(Test::RayCast)),
                     aabb_cast_system.run_if(in_state(Test::AabbCast)),
@@ -52,6 +52,18 @@ enum Test {
     CircleCast,
 }
 
+impl Test {
+    fn next(&self) -> Self {
+        match &self {
+            Self::AabbSweep => Self::CircleSweep,
+            Self::CircleSweep => Self::RayCast,
+            Self::RayCast => Self::AabbCast,
+            Self::AabbCast => Self::CircleCast,
+            Self::CircleCast => Self::AabbSweep,
+        }
+    }
+}
+
 fn update_test_state(
     keycode: Res<ButtonInput<KeyCode>>,
     cur_state: Res<State<Test>>,
@@ -61,15 +73,7 @@ fn update_test_state(
         return;
     }
 
-    use Test::*;
-    let next = match **cur_state {
-        AabbSweep => CircleSweep,
-        CircleSweep => RayCast,
-        RayCast => AabbCast,
-        AabbCast => CircleCast,
-        CircleCast => AabbSweep,
-    };
-    state.set(next);
+    state.set((**cur_state).next());
 }
 
 fn update_text(mut text: Query<&mut Text>, cur_state: Res<State<Test>>) {
