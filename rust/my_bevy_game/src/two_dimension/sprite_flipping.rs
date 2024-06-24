@@ -13,7 +13,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn(SpriteBundle {
         texture: asset_server.load("branding/bevy_bird_dark.png"),
         sprite: Sprite {
-            flip_x: false,
+            flip_x: true,
             flip_y: true,
             ..default()
         },

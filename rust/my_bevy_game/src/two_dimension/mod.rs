@@ -11,6 +11,7 @@ pub mod shapes;
 pub mod sprite_flipping;
 pub mod sprite_sheet;
 pub mod sprite_slice;
+pub mod sprite_tile;
 pub mod text;
 pub mod transparency_2d;
 pub mod viewport_to_world;
