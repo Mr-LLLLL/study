@@ -14,5 +14,6 @@ pub mod sprite_sheet;
 pub mod sprite_slice;
 pub mod sprite_tile;
 pub mod text;
+pub mod texture_atlas;
 pub mod transparency_2d;
 pub mod viewport_to_world;
