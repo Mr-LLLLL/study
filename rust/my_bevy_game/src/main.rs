@@ -8,5 +8,5 @@ mod two_dimension;
 mod window;
 
 fn main() {
-    animation::animated_fox::run();
+    animation::cubic_curve::run();
 }
