@@ -24,7 +24,10 @@ pub fn run() {
             ..default()
         })
         .add_systems(Startup, setup)
-        .add_systems(Update, (name_morphs, setup_animations))
+        .add_systems(
+            Update,
+            (name_morphs, setup_animations, bevy::window::close_on_esc),
+        )
         .run();
 }
 
