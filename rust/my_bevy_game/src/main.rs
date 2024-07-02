@@ -8,5 +8,5 @@ mod two_dimension;
 mod window;
 
 fn main() {
-    animation::gltf_skinned_mesh::run();
+    animation::morph_targets::run();
 }
