@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
-	"path/filepath"
 )
 
+type str struct {
+	id string
+}
+
 func main() {
-	fmt.Println("hello")
-	filepath.Join()
+	fmt.Printf("%[1]s%[1]s", "sdf")
 }
 
 func hello() {
