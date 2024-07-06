@@ -62,8 +62,8 @@ impl Shared {
     }
 
     async fn broadcast(&mut self, sender: SocketAddr, message: &str) {
+        println!("{message}");
         for peer in self.peers.iter_mut() {
-            println!("{message}");
             if *peer.0 != sender {
                 let _ = peer.1.send(message.into());
             }
