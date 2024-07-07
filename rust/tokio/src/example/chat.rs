@@ -12,7 +12,6 @@ use std::error::Error;
 use std::io;
 use std::net::SocketAddr;
 use std::sync::Arc;
-use tracing::info;
 
 #[tokio::main]
 pub async fn run() {
@@ -62,7 +61,7 @@ impl Shared {
     }
 
     async fn broadcast(&mut self, sender: SocketAddr, message: &str) {
-        println!("{message}");
+        tracing::info!("{message}");
         for peer in self.peers.iter_mut() {
             if *peer.0 != sender {
                 let _ = peer.1.send(message.into());
