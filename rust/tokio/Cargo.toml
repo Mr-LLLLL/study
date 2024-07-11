@@ -25,3 +25,7 @@ httparse = "1.0"
 httpdate = "1.0"
 once_cell = "1.5.2"
 rand = "0.8.3"
+
+[[example]]
+name = "dump"
+path = "src/example/dump.rs"

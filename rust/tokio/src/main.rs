@@ -7,5 +7,5 @@ pub fn main() {
     // example::connect::run();
     // example::chat::run();
     // example::custom_executor_tokio_context::run();
-    example::custom_executor::run();
+    example::dump::run();
 }
