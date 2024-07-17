@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 
 use std::{thread, time::Duration};
+
 mod example;
 
 pub fn main() {
@@ -20,7 +21,15 @@ pub fn main() {
 
 fn tokio_work_may_dropped() {
     tokio::runtime::Runtime::new().unwrap().block_on(async {
+        let handle = tokio::spawn(async { println!("test1") });
+        thread::sleep(Duration::from_secs(1));
+        tokio::spawn(async { println!("test2") });
+        tokio::spawn(async { println!("test3") });
+        tokio::spawn(async { println!("test4") });
+        tokio::spawn(async { println!("test5") });
         tokio::spawn(process());
+
+        handle.await.unwrap();
     })
 }
 
