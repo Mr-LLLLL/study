@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 
-use std::{thread, time::Duration};
+use std::time::Duration;
+use tokio::time;
 
 mod example;
 
@@ -22,7 +23,7 @@ pub fn main() {
 fn tokio_work_may_dropped() {
     tokio::runtime::Runtime::new().unwrap().block_on(async {
         let handle = tokio::spawn(async { println!("test1") });
-        thread::sleep(Duration::from_secs(1));
+        time::sleep(Duration::from_secs(1)).await;
         tokio::spawn(async { println!("test2") });
         tokio::spawn(async { println!("test3") });
         tokio::spawn(async { println!("test4") });
@@ -38,11 +39,11 @@ async fn tokio_spawn() {
     // here running process
     let handle = tokio::spawn(process());
 
-    thread::sleep(Duration::from_secs(1));
+    time::sleep(Duration::from_secs(1)).await;
 
     println!("hello");
 
-    thread::sleep(Duration::from_secs(1));
+    time::sleep(Duration::from_secs(1)).await;
 
     let out = handle.await.unwrap();
     println!("Main Finished Got {}", out);
@@ -53,14 +54,15 @@ fn tokio_main() {
     rt.block_on(async {
         let op = process();
 
-        thread::sleep(Duration::from_secs(1));
+        time::sleep(Duration::from_secs(1)).await;
 
         println!("hello");
 
-        thread::sleep(Duration::from_secs(1));
+        time::sleep(Duration::from_secs(1)).await;
+
+        op.await;
 
         // here running process
-        op.await;
         println!("Main finished");
     });
 }
@@ -68,7 +70,7 @@ fn tokio_main() {
 async fn process() -> i32 {
     println!("world");
 
-    thread::sleep(Duration::from_secs(1));
+    time::sleep(Duration::from_secs(1)).await;
 
     println!("coroutine finished");
 
