@@ -13,10 +13,8 @@ pub fn main() {
     // example::custom_executor_tokio_context::run();
     // example::dump::run();
     // example::proxy::run();
-<<<<<<< HEAD
     // example::udp_client::run();
     example::udp_codec::run();
-=======
     // example::print_each_packet::run();
 
     // tokio_main();
@@ -79,5 +77,4 @@ async fn process() -> i32 {
     println!("coroutine finished");
 
     return 1;
->>>>>>> 233e8303b746fb76cadf033b3495c9873d77051b
 }
