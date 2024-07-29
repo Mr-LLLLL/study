@@ -6,3 +6,5 @@ pub mod dump;
 pub mod echo;
 pub mod hello_world;
 pub mod proxy;
+pub mod udp_client;
+pub mod udp_codec;

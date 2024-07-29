@@ -9,4 +9,6 @@ pub fn main() {
     // example::custom_executor_tokio_context::run();
     // example::dump::run();
     // example::proxy::run();
+    // example::udp_client::run();
+    example::udp_codec::run();
 }
