@@ -1,4 +1,3 @@
-#[warn(rust_2018_idioms)]
 use tokio::net::TcpListener;
 use tokio_stream::StreamExt;
 use tokio_util::codec::{BytesCodec, Decoder};

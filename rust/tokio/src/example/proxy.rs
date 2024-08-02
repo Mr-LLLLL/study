@@ -1,5 +1,3 @@
-#![warn(rust_2018_idioms)]
-
 use tokio::io::copy_bidirectional;
 use tokio::net::{TcpListener, TcpStream};
 

@@ -1,5 +1,3 @@
-#![warn(rust_2018_idioms)]
-
 use tokio::net::{TcpListener, TcpStream};
 use tokio::sync::{mpsc, Mutex};
 use tokio_stream::StreamExt;

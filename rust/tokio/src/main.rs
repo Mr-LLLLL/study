@@ -1,7 +1,11 @@
 #![allow(dead_code)]
+#![warn(rust_2018_idioms)]
 
 use std::time::Duration;
 use tokio::time;
+
+#[macro_use]
+extern crate serde_derive;
 
 mod example;
 
@@ -14,12 +18,13 @@ pub fn main() {
     // example::dump::run();
     // example::proxy::run();
     // example::udp_client::run();
-    example::udp_codec::run();
+    // example::udp_codec::run();
+    example::tinyhttp::run();
     // example::print_each_packet::run();
 
     // tokio_main();
     // tokio_spawn();
-    tokio_work_may_dropped();
+    // tokio_work_may_dropped();
 }
 
 fn tokio_work_may_dropped() {

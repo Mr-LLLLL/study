@@ -1,5 +1,3 @@
-#![warn(rust_2018_idioms)]
-
 use std::env;
 use std::io::{stdin, Read};
 use std::net::SocketAddr;
