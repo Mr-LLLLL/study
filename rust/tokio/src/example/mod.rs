@@ -7,6 +7,7 @@ pub mod echo;
 pub mod hello_world;
 pub mod print_each_packet;
 pub mod proxy;
+pub mod tinydb;
 pub mod tinyhttp;
 pub mod udp_client;
 pub mod udp_codec;

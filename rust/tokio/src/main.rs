@@ -12,15 +12,16 @@ mod example;
 pub fn main() {
     // example::hello_world::run();
     // example::echo::run();
-    // example::connect::run();
+    example::connect::run();
     // example::chat::run();
     // example::custom_executor_tokio_context::run();
     // example::dump::run();
     // example::proxy::run();
     // example::udp_client::run();
     // example::udp_codec::run();
-    example::tinyhttp::run();
+    // example::tinyhttp::run();
     // example::print_each_packet::run();
+    // example::tinydb::run();
 
     // tokio_main();
     // tokio_spawn();
